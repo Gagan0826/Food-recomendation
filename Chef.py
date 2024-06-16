@@ -9,7 +9,7 @@ class Chef(User):
         super().__init__(user_id, name)
 
     def recommend_menu(self, item_id, date):
-        query = "INSERT INTO chef_recommendation_menu (item_id, rolled_out_date,food_type) VALUES (%s,%s)"
+        query = "INSERT INTO chef_recommendation_menu (item_id, rolled_out_date) VALUES (%s,%s)"
         Database.execute_query(query, (item_id, date))
 
     def view_feedback(self, item_id):
@@ -18,3 +18,19 @@ class Chef(User):
 
     def send_notification(self, notification_type, item_id):
         Notification.send(notification_type, item_id)
+
+    def view_recomendation_menu(self):
+        query =  """
+        SELECT *
+        FROM menu_items
+        WHERE item_id IN (SELECT item_id FROM chef_recommendation_menu)
+        """
+        return Database.fetch_query(query)
+    
+    def view_ordered_items(self):
+        query =   """
+        SELECT *
+        FROM menu_items
+        WHERE item_id IN (SELECT item_id FROM Final_Order)
+        """
+        return Database.fetch_query(query)

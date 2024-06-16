@@ -105,8 +105,10 @@ class ConsoleApplication:
             print("1. Recommend Menu")
             print("2. View Feedback")
             print("3. Send Notification")
-            print("4. view Menu Item")
-            print("5. Exit")
+            print("4. View All Menu Items")
+            print("5. View Recomendation Menu Items")
+            print("6. View ordered Items")
+            print("7. Exit")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -133,6 +135,16 @@ class ConsoleApplication:
                     print(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal:{item[3]}, Availability: {item[4]}")
 
             elif choice == '5':
+                menu = chef.view_recomendation_menu()
+                for item in menu:
+                    print(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal:{item[3]}, Availability: {item[4]}")
+
+            elif choice == '6':
+                menu = chef.view_ordered_items()
+                for item in menu:
+                    print(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal:{item[3]}, Availability: {item[4]}")
+
+            elif choice == '7':
                 break
 
     @staticmethod
@@ -147,10 +159,10 @@ class ConsoleApplication:
             choice = input("Enter your choice: ")
 
             if choice == '1':
-                meal_type = input("Enter meal type: ")
                 date = currentDate.today()
                 item_id = int(input("Enter item ID: "))
-                employee.choose_meal(meal_type, date, item_id)
+                emp_id=employee.get_emp_id()
+                employee.choose_meal(date, item_id,emp_id)
                 print("Meal chosen successfully.")
 
             elif choice == '2':

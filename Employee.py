@@ -8,9 +8,9 @@ class Employee(User):
     def __init__(self, user_id, name):
         super().__init__(user_id, name)
 
-    def choose_meal(self, meal_type, date, item_id):
-        query = "INSERT INTO orders (employee_id, date, item_id) VALUES (%s, %s, %s)"
-        Database.execute_query(query, (self.user_id, date, item_id))
+    def choose_meal(self, date, item_id,user_id):
+        query = "INSERT INTO Final_Order (employee_id, date, item_id) VALUES (%s, %s, %s)"
+        Database.execute_query(query, (user_id, date, item_id))
 
     def give_feedback(self, item_id, comment, rating):
         feedback = Feedback(item_id, comment, rating)
@@ -26,4 +26,7 @@ class Employee(User):
     
     def receive_notification(self):
         return Notification.receive(self.user_id)
+    
+    def get_emp_id(self):
+        return self.user_id
     
