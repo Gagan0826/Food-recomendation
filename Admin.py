@@ -20,5 +20,3 @@ class Admin(User):
         query = "DELETE FROM menu_items WHERE item_id=%s"
         Database.execute_query(query, (item_id,))
 
-    def generate_report(self, report_type, date_range):
-        pass

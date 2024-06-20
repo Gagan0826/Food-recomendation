@@ -12,8 +12,8 @@ class Employee(User):
         query = "INSERT INTO Final_Order (employee_id, date, item_id) VALUES (%s, %s, %s)"
         Database.execute_query(query, (user_id, date, item_id))
 
-    def give_feedback(self, item_id, comment, rating):
-        feedback = Feedback(item_id, comment, rating)
+    def give_feedback(self, item_id, comment, rating, date):
+        feedback = Feedback(item_id, comment, rating, date)
         feedback.save()
 
     def view_menu(self):

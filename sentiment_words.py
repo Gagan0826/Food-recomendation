@@ -5,6 +5,6 @@ positive_words = [
 ]
 
 negative_words = [
-    "bad", "terrible", "awful", "horrible", "worst", "hate", "dislike", "negative", "poor", "sad", "angry", "spicy",
+    "not","bad", "terrible", "awful", "horrible", "worst", "hate", "dislike", "negative", "poor", "sad", "angry", "spicy",
     "oily", "salty", "bland", "burnt", "expensive", "unavailable", "stale", "cold", "overcooked", "undercooked", "greasy", "unpalatable"
 ]

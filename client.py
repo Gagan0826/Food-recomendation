@@ -87,13 +87,6 @@ class ConsoleApplication:
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
-            elif choice == '5':
-                report_type = input("Enter report type: ")
-                date_range = input("Enter date range: ")
-                command = f"GENERATE_REPORT,{admin_id},{admin_name},{report_type},{date_range}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
-
             elif choice == '6':
                 break
 
@@ -109,7 +102,8 @@ class ConsoleApplication:
             print("6. View Ordered Items")
             print("7. Generate recomendations")
             print("8. View Generated Recommended Items")
-            print("9. Exit")
+            print("9. Generate Report")
+            print("10. Exit")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -155,9 +149,14 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '9':
-                break
+                print("Please enter the dates in the format YYYY-MM-DD")
+                date_from = input("Enter starting date: ")
+                date_till = input("Enter ending date: ")
+                command = f"GENERATE_REPORT,{chef_id},{chef_name},{date_from},{date_till}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
 
-            elif choice == '7':
+            elif choice == '10':
                 break
 
     @staticmethod
@@ -182,7 +181,8 @@ class ConsoleApplication:
                 item_id = int(input("Enter item ID: "))
                 comment = input("Enter your comment: ")
                 rating = int(input("Enter your rating: "))
-                command = f"GIVE_FEEDBACK,{emp_id},{emp_name},{item_id},{comment},{rating}"
+                date= currentDate.today()
+                command = f"GIVE_FEEDBACK,{emp_id},{emp_name},{item_id},{comment},{rating},{date}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '3':

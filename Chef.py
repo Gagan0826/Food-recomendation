@@ -2,6 +2,7 @@ from MenuItem import MenuItem
 from Notification import Notification
 from User import User
 from Database import Database
+from tabulate import tabulate
 
 
 class Chef(User):
@@ -47,3 +48,17 @@ class Chef(User):
         ORDER BY generated_recommended_items.score DESC
         """
         return Database.fetch_query(query)
+    
+    def generate_report(self, date_from, date_till):
+            query = """
+            SELECT feedback.feedback_id, feedback.item_id, menu_items.name, feedback.comment, feedback.rating, feedback.feedback_date
+            FROM feedback
+            JOIN menu_items ON feedback.item_id = menu_items.item_id
+            WHERE feedback.feedback_date BETWEEN %s AND %s
+            ORDER BY feedback.feedback_date ASC
+            """
+            result = Database.fetch_query(query, (date_from, date_till))
+        
+            headers = ["Feedback ID", "Item ID", "Item Name", "Comment", "Rating", "Feedback Date"]
+            table = tabulate(result, headers, tablefmt="pretty")
+            return table

@@ -59,7 +59,8 @@ def process_request(client_socket, request):
             item_id = int(params[2])
             comment = params[3]
             rating = params[4]
-            employee.give_feedback(item_id,comment,rating)
+            date = params[5]
+            employee.give_feedback(item_id,comment,rating,date)
             client_socket.send("Feedback given successfully".encode('utf-8'))
         elif command == "VIEW_MENU":
             admin = Admin(user_id=params[0], name=params[1])
@@ -106,6 +107,21 @@ def process_request(client_socket, request):
             chef = Chef(user_id=params[0], name=params[1])
             recommended_items = chef.view_generated_recommended_items()
             response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {item[3]:.2f}" for item in recommended_items])
+            client_socket.send(response.encode('utf-8'))
+        elif command == "GENERATE_REPORT":
+            chef_id = int(params[0])
+            chef_name = params[1]
+            date_from = params[2]
+            date_till = params[3]
+            
+            chef = Chef(user_id=chef_id, name=chef_name)
+            generated_report = chef.generate_report(date_from, date_till)
+            
+            if generated_report:
+                response = generated_report
+            else:
+                response = "No feedback found for the specified date range."
+            
             client_socket.send(response.encode('utf-8'))
         else:
             client_socket.send("Unknown command".encode('utf-8'))
