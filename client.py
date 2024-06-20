@@ -58,8 +58,7 @@ class ConsoleApplication:
             print("2. Update Menu Item")
             print("3. Delete Menu Item")
             print("4. View Menu Item")
-            print("5. Generate Report")
-            print("6. Exit")
+            print("5. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -87,7 +86,7 @@ class ConsoleApplication:
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
-            elif choice == '6':
+            elif choice == '5':
                 break
 
     @staticmethod
@@ -103,7 +102,7 @@ class ConsoleApplication:
             print("7. Generate recomendations")
             print("8. View Generated Recommended Items")
             print("9. Generate Report")
-            print("10. Exit")
+            print("10. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -167,7 +166,7 @@ class ConsoleApplication:
             print("2. Give Feedback")
             print("3. View Menu")
             print("4. Receive Notifications")
-            print("5. Exit")
+            print("5. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -196,12 +195,17 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
+                command = f"VOTE_FOOD_ITEM"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+                
+            elif choice == '5':
                 break
 
     @staticmethod
     def send_request(command):
         HOST = '127.0.0.1'
-        PORT = 9999
+        PORT = 8080
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((HOST, PORT))
         client_socket.send(command.encode('utf-8'))

@@ -19,4 +19,5 @@ class Admin(User):
     def delete_menu_item(self, item_id):
         query = "DELETE FROM menu_items WHERE item_id=%s"
         Database.execute_query(query, (item_id,))
-
+        response = "item deleted successfully"
+        return response
