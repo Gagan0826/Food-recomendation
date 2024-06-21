@@ -16,7 +16,7 @@ class Employee(User):
         feedback = Feedback(item_id, comment, rating, date)
         feedback.save()
 
-    def view_menu(self):
+    def view_chef_recommended_menu(self):
         query =  """
         SELECT *
         FROM menu_items
@@ -30,3 +30,10 @@ class Employee(User):
     def get_emp_id(self):
         return self.user_id
     
+    def request_food_item(self, date, item_id,user_id):
+        query = "INSERT INTO user_preference_menu (item_id,employee_id, choosen_date) VALUES (%s, %s, %s)"
+        Database.execute_query(query, (item_id,user_id, date,))
+
+    def view_menu(self):
+        query = "SELECT * FROM menu_items"
+        return Database.fetch_query(query)

@@ -55,6 +55,10 @@ def process_request(client_socket, request):
             admin = Admin(user_id=params[0], name=params[1])
             response = admin.delete_menu_item(int(params[2]))
             client_socket.send(response.encode('utf-8'))
+        elif command == "RECOMMEND_MENU":
+            chef = Chef(user_id=params[0], name=params[1])
+            chef.recommend_menu(params[2], params[3])
+            client_socket.send("Recommended successfully".encode('utf-8'))
 
         elif command == "GIVE_FEEDBACK":
             employee = Employee(user_id=params[0], name=params[1])
@@ -65,9 +69,9 @@ def process_request(client_socket, request):
             employee.give_feedback(item_id,comment,rating,date)
             client_socket.send("Feedback given successfully".encode('utf-8'))
 
-        elif command == "VIEW_MENU":
-            admin = Admin(user_id=params[0], name=params[1])
-            menu = admin.view_menu()
+        elif command == "VIEW_AVAILABLE_MENU":
+            employee = Employee(user_id=params[0], name=params[1])
+            menu = employee.view_chef_recommended_menu()
             response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in menu])
             client_socket.send(response.encode('utf-8'))
 
@@ -114,7 +118,13 @@ def process_request(client_socket, request):
             feedbackAnalyzer.recommend_top_items()
             client_socket.send("Top items recommended successfully".encode('utf-8'))
 
-        elif command == "VIEW_RECOMMENDED_ITEMS":
+        elif command == "VIEW_VOTED_ITEMS":
+            chef = Chef(user_id=params[0], name=params[1])
+            menu = chef.view_voted_items()
+            response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in menu])
+            client_socket.send(response.encode('utf-8'))
+
+        elif command == "VIEW_GENERATED_RECOMMENDED_ITEMS":
             chef = Chef(user_id=params[0], name=params[1])
             recommended_items = chef.view_generated_recommended_items()
             response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {item[3]:.2f}" for item in recommended_items])
@@ -135,12 +145,29 @@ def process_request(client_socket, request):
                 response = "No feedback found for the specified date range."
             
             client_socket.send(response.encode('utf-8'))
-        elif command == "VIEW_RECOMMENDED_ITEMS":
-            chef = Chef(user_id=params[0], name=params[1])
-            recommended_items = chef.view_generated_recommended_items()
-            response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {item[3]:.2f}" for item in recommended_items])
-            client_socket.send(response.encode('utf-8'))
+        
+        elif command == "VOTE_FOOD_ITEM":
+            employee = Employee(user_id=params[0], name=params[1])
+            date = params[2]
+            item_id = params[3]
+            employee.request_food_item(date, item_id, params[0])  
+            client_socket.send("Vote recorded successfully".encode('utf-8'))
+
+        elif command == "VIEW_ALL_MENU":
+            employee = Employee(user_id=params[0], name=params[1])
+            recommended_items = employee.view_menu()
             
+            formatted_items = []
+            for item in recommended_items:
+                try:
+                    formatted_items.append(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {float(item[3]):.2f}")
+                except ValueError:
+                    formatted_items.append(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {item[3]}")
+            
+            response = "\n".join(formatted_items)
+            client_socket.send(response.encode('utf-8'))
+
+
         else:
             client_socket.send("Unknown command".encode('utf-8'))
     except Exception as e:

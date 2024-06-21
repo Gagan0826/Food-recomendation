@@ -62,3 +62,11 @@ class Chef(User):
             headers = ["Feedback ID", "Item ID", "Item Name", "Comment", "Rating", "Feedback Date"]
             table = tabulate(result, headers, tablefmt="pretty")
             return table
+    
+    def view_voted_items(self):
+        query =   """
+        SELECT *
+        FROM menu_items
+        WHERE item_id IN (SELECT item_id FROM user_preference_menu)
+        """
+        return Database.fetch_query(query)

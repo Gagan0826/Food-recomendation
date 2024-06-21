@@ -12,6 +12,3 @@ class User:
         result = Database.fetch_query(query, (self.user_id, self.name))
         return result
     
-    def view_menu(self):
-        query = "SELECT * FROM menu_items"
-        return Database.fetch_query(query)

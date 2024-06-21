@@ -21,3 +21,6 @@ class Admin(User):
         Database.execute_query(query, (item_id,))
         response = "item deleted successfully"
         return response
+    def view_menu(self):
+        query = "SELECT * FROM menu_items"
+        return Database.fetch_query(query)
