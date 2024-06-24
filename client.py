@@ -58,8 +58,7 @@ class ConsoleApplication:
             print("2. Update Menu Item")
             print("3. Delete Menu Item")
             print("4. View Menu Item")
-            print("5. Generate Report")
-            print("6. Exit")
+            print("5. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -88,13 +87,6 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
-                report_type = input("Enter report type: ")
-                date_range = input("Enter date range: ")
-                command = f"GENERATE_REPORT,{admin_id},{admin_name},{report_type},{date_range}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
-
-            elif choice == '6':
                 break
 
     @staticmethod
@@ -109,7 +101,9 @@ class ConsoleApplication:
             print("6. View Ordered Items")
             print("7. Generate recomendations")
             print("8. View Generated Recommended Items")
-            print("9. Exit")
+            print("9. View employee voted Items")
+            print("10. Generate Report")
+            print("11. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -130,7 +124,7 @@ class ConsoleApplication:
                 ConsoleApplication.send_request(command)
 
             elif choice == '4':
-                command = f"VIEW_MENU,{chef_id},{chef_name}"
+                command = f"VIEW_ALL_MENU,{chef_id},{chef_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
@@ -150,14 +144,24 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '8':
-                command = f"VIEW_RECOMMENDED_ITEMS,{chef_id},{chef_name}"
+                command = f"VIEW_GENERATED_RECOMMENDED_ITEMS,{chef_id},{chef_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
             elif choice == '9':
-                break
+                command = f"VIEW_VOTED_ITEMS,{chef_id},{chef_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
 
-            elif choice == '7':
+            elif choice == '10':
+                print("Please enter the dates in the format YYYY-MM-DD")
+                date_from = input("Enter starting date: ")
+                date_till = input("Enter ending date: ")
+                command = f"GENERATE_REPORT,{chef_id},{chef_name},{date_from},{date_till}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '11':
                 break
 
     @staticmethod
@@ -166,9 +170,11 @@ class ConsoleApplication:
             print("\nEmployee Menu")
             print("1. Choose Meal")
             print("2. Give Feedback")
-            print("3. View Menu")
+            print("3. View available Menu")
             print("4. Receive Notifications")
-            print("5. Exit")
+            print("5. View all Menu")
+            print("6. Vote for food")
+            print("7. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -182,11 +188,12 @@ class ConsoleApplication:
                 item_id = int(input("Enter item ID: "))
                 comment = input("Enter your comment: ")
                 rating = int(input("Enter your rating: "))
-                command = f"GIVE_FEEDBACK,{emp_id},{emp_name},{item_id},{comment},{rating}"
+                date= currentDate.today()
+                command = f"GIVE_FEEDBACK,{emp_id},{emp_name},{item_id},{comment},{rating},{date}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '3':
-                command = f"VIEW_MENU,{emp_id},{emp_name}"
+                command = f"VIEW_AVAILABLE_MENU,{emp_id},{emp_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
@@ -196,12 +203,24 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
+                command = f"VIEW_ALL_MENU,{emp_id},{emp_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '6':
+                date = currentDate.today()
+                item_id = int(input("Enter food item ID: "))
+                command = f"VOTE_FOOD_ITEM,{emp_id},{emp_name},{date},{item_id}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '7':
                 break
 
     @staticmethod
     def send_request(command):
         HOST = '127.0.0.1'
-        PORT = 9999
+        PORT = 8080
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((HOST, PORT))
         client_socket.send(command.encode('utf-8'))

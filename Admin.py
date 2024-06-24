@@ -19,6 +19,8 @@ class Admin(User):
     def delete_menu_item(self, item_id):
         query = "DELETE FROM menu_items WHERE item_id=%s"
         Database.execute_query(query, (item_id,))
-
-    def generate_report(self, report_type, date_range):
-        pass
+        response = "item deleted successfully"
+        return response
+    def view_menu(self):
+        query = "SELECT * FROM menu_items"
+        return Database.fetch_query(query)
