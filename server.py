@@ -6,7 +6,7 @@ from Employee import Employee
 from Notification import Notification
 from FeedbackAnalyzer import FeedbackAnalyzer
 
-HOST = '127.0.0.1'
+HOST = '192.168.5.23'
 PORT = 8080
 NOTIFICATION_PORT = 5050
 
