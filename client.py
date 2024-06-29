@@ -64,15 +64,17 @@ class ConsoleApplication:
             if choice == '1':
                 name = input("Enter item name: ")
                 price = float(input("Enter item price: "))
+                type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
                 availability = input("Enter item availability (1 for yes/ 0 for no): ")
-                command = f"ADD_MENU_ITEM,{admin_id},{admin_name},{name},{price},{availability}"
+                command = f"ADD_MENU_ITEM,{admin_id},{admin_name},{name},{price},{type},{availability}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '2':
                 item_id = int(input("Enter item ID: "))
                 new_price = float(input("Enter new price: "))
+                type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
                 new_availability = input("Enter new availability (yes/no): ")
-                command = f"UPDATE_MENU_ITEM,{admin_id},{admin_name},{item_id},{new_price},{new_availability}"
+                command = f"UPDATE_MENU_ITEM,{admin_id},{admin_name},{item_id},{new_price},{type},{new_availability}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '3':
@@ -82,7 +84,7 @@ class ConsoleApplication:
                 print(response)
             
             elif choice == '4':
-                command = f"VIEW_MENU,{admin_id},{admin_name}"
+                command = f"VIEW_ALL_MENU,{admin_id},{admin_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
@@ -172,9 +174,8 @@ class ConsoleApplication:
             print("2. Give Feedback")
             print("3. View available Menu")
             print("4. Receive Notifications")
-            print("5. View all Menu")
-            print("6. Vote for food")
-            print("7. Logout")
+            print("5. Vote for food")
+            print("6. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -203,28 +204,26 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
-                command = f"VIEW_ALL_MENU,{emp_id},{emp_name}"
+                command = f"VIEW_AVAILABLE_MENU,{emp_id},{emp_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
-
-            elif choice == '6':
                 date = currentDate.today()
                 item_id = int(input("Enter food item ID: "))
                 command = f"VOTE_FOOD_ITEM,{emp_id},{emp_name},{date},{item_id}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
-            elif choice == '7':
+            elif choice == '6':
                 break
 
     @staticmethod
     def send_request(command):
-        HOST = '192.168.5.23'
+        HOST = 'localhost'
         PORT = 8080
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((HOST, PORT))
         client_socket.send(command.encode('utf-8'))
-        response = client_socket.recv(1024).decode('utf-8')
+        response = client_socket.recv(4096).decode('utf-8')
         client_socket.close()
         return response
 

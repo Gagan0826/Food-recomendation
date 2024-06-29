@@ -7,9 +7,9 @@ class Admin(User):
     def __init__(self, user_id, name):
         super().__init__(user_id, name)
 
-    def add_menu_item(self, name, price, availability):
-        query = "INSERT INTO menu_items (name, price, availability) VALUES (%s, %s, %s)"
-        Database.execute_query(query, (name, price, availability))
+    def add_menu_item(self, name, price, type,availability):
+        query = "INSERT INTO menu_items (name, price, food_type, availability) VALUES (%s, %s, %s,%s)"
+        Database.execute_query(query, (name, price,type, availability))
 
     def update_menu_item(self, item_id, new_price, new_availability):
         item = MenuItem(item_id, None, None, None)
@@ -21,6 +21,7 @@ class Admin(User):
         Database.execute_query(query, (item_id,))
         response = "item deleted successfully"
         return response
+    
     def view_menu(self):
         query = "SELECT * FROM menu_items"
         return Database.fetch_query(query)

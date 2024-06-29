@@ -6,14 +6,14 @@ from Employee import Employee
 from Notification import Notification
 from FeedbackAnalyzer import FeedbackAnalyzer
 
-HOST = '192.168.5.23'
+HOST = 'localhost'
 PORT = 8080
 NOTIFICATION_PORT = 5050
 
 def handle_client(client_socket):
     while True:
         try:
-            request = client_socket.recv(1024).decode('utf-8')
+            request = client_socket.recv(4096).decode('utf-8')
             if not request:
                 break
             process_request(client_socket, request)
@@ -43,7 +43,7 @@ def process_request(client_socket, request):
                 client_socket.send("Invalid credentials".encode('utf-8'))
         elif command == "ADD_MENU_ITEM":
             admin = Admin(user_id=params[0], name=params[1])
-            admin.add_menu_item(params[2], float(params[3]), params[4])
+            admin.add_menu_item(params[2], float(params[3]), params[4],params[5])
             client_socket.send("Menu item added successfully".encode('utf-8'))
 
         elif command == "UPDATE_MENU_ITEM":
@@ -66,8 +66,12 @@ def process_request(client_socket, request):
             comment = params[3]
             rating = params[4]
             date = params[5]
-            employee.give_feedback(item_id,comment,rating,date)
-            client_socket.send("Feedback given successfully".encode('utf-8'))
+            try:
+                employee.give_feedback(item_id, comment, rating, date)
+                response = "Feedback given successfully"
+            except Exception as e:
+                response = f"Failed to give feedback: {e}"
+            client_socket.send(response.encode('utf-8'))
 
         elif command == "VIEW_AVAILABLE_MENU":
             employee = Employee(user_id=params[0], name=params[1])
@@ -155,19 +159,9 @@ def process_request(client_socket, request):
 
         elif command == "VIEW_ALL_MENU":
             employee = Employee(user_id=params[0], name=params[1])
-            recommended_items = employee.view_menu()
-            
-            formatted_items = []
-            for item in recommended_items:
-                try:
-                    formatted_items.append(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {float(item[3]):.2f}")
-                except ValueError:
-                    formatted_items.append(f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Score: {item[3]}")
-            
-            response = "\n".join(formatted_items)
+            all_items = employee.view_menu()
+            response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in all_items])
             client_socket.send(response.encode('utf-8'))
-
-
         else:
             client_socket.send("Unknown command".encode('utf-8'))
     except Exception as e:
@@ -186,7 +180,7 @@ def start_server():
         client_handler.start()
 
 class NotificationServer(threading.Thread):
-    def __init__(self, host='127.0.0.1', port=NOTIFICATION_PORT):
+    def __init__(self, host='localhost', port=NOTIFICATION_PORT):
         super().__init__()
         self.host = host
         self.port = port

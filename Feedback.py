@@ -9,6 +9,6 @@ class Feedback:
         self.date = date
 
     def save(self):
-        query = "INSERT INTO feedback (item_id, comment, rating, date) VALUES (%s, %s, %s, %s)"
+        query = "INSERT INTO feedback (item_id, comment, rating, feedback_date) VALUES (%s, %s, %s, %s)"
         Database.execute_query(query, (self.item_id, self.comment, self.rating, self.date))
         

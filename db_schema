@@ -1,0 +1,66 @@
+	CREATE DATABASE CafeManagement;
+	USE CafeManagement;
+
+	CREATE TABLE users (
+		user_id INT PRIMARY KEY,
+		user_name VARCHAR(50) NOT NULL,
+		role ENUM('Admin', 'Chef', 'Employee') NOT NULL
+	);
+
+
+	CREATE TABLE menu_items (
+		item_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		name varchar(50) NOT NULL unique,
+		price REAL NOT NULL,
+		food_type ENUM('Breakfast', 'Lunch', 'Dinner') NOT NULL,
+		availability INT
+	);
+
+
+	ALTER TABLE menu_items AUTO_INCREMENT = 101;
+
+
+
+CREATE TABLE chef_recommendation_menu (
+    FoodRecommendation_id INT AUTO_INCREMENT PRIMARY KEY,
+    rolled_out_date DATE NOT NULL,
+    item_id INT,
+    food_type ENUM('Breakfast', 'Lunch', 'Dinner') NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES menu_items(item_id)
+);
+
+
+	CREATE TABLE Final_Order (
+		order_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		date DATE NOT NULL,
+		employee_id INTEGER,
+		item_id INTEGER,
+		FOREIGN KEY (employee_id) REFERENCES users(user_id),
+		FOREIGN KEY (item_id) REFERENCES menu_items(item_id)
+	);
+
+	CREATE TABLE feedback (
+		feedback_id INT AUTO_INCREMENT PRIMARY KEY,
+		item_id INT,
+		comment TEXT,
+		rating INT CHECK (rating BETWEEN 1 AND 5),
+		FOREIGN KEY (item_id) REFERENCES menu_items(item_id)
+	);
+CREATE TABLE IF NOT EXISTS generated_recommended_items (
+    recommendation_id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT,
+    score DOUBLE,
+    FOREIGN KEY (item_id) REFERENCES menu_items(item_id)
+);
+
+CREATE TABLE user_preference_menu (
+    user_preference_id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT,
+    employee_id INT,
+    choosen_date date,
+    FOREIGN KEY (item_id) REFERENCES menu_items(item_id),
+    FOREIGN KEY (employee_id) REFERENCES users(user_id)
+);
+
+drop table user_preference_menu;
+
