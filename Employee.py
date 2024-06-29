@@ -18,10 +18,11 @@ class Employee(User):
 
     def view_chef_recommended_menu(self):
         query =  """
-        SELECT *
-        FROM menu_items
-        WHERE item_id IN (SELECT item_id FROM chef_recommendation_menu)
-        """
+    SELECT mi.*
+    FROM menu_items mi
+    JOIN chef_recommendation_menu crm ON mi.item_id = crm.item_id
+    WHERE crm.rolled_out_date = CURDATE() 
+    """
         return Database.fetch_query(query)
     
     def receive_notification(self):

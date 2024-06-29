@@ -74,10 +74,22 @@ def process_request(client_socket, request):
             client_socket.send(response.encode('utf-8'))
 
         elif command == "VIEW_AVAILABLE_MENU":
-            employee = Employee(user_id=params[0], name=params[1])
-            menu = employee.view_chef_recommended_menu()
-            response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in menu])
-            client_socket.send(response.encode('utf-8'))
+            try:
+                employee = Employee(user_id=params[0], name=params[1])
+                menu = employee.view_chef_recommended_menu()
+                if menu:
+                    response = "\n".join([
+                        f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" 
+                        for item in menu
+                    ])
+                    client_socket.send(response.encode('utf-8'))
+                else:
+                    response = "No items added yet"
+                    client_socket.send(response.encode('utf-8'))
+            except Exception as e:
+                error_message = f"An error occurred while fetching the menu: {str(e)}"
+                client_socket.send(error_message.encode('utf-8'))
+            return
 
         elif command == "SEND_NOTIFICATION":
             notification_message = params[0]
