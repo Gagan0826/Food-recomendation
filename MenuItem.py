@@ -1,5 +1,5 @@
 from Database import Database
-
+from FeedbackAnalyzer import FeedbackAnalyzer
 class MenuItem:
     def __init__(self, item_id, name, price, availability):
         self.item_id = item_id
@@ -27,3 +27,16 @@ class MenuItem:
         if result and result[0][0] is not None:
             return f"{result[0][0]:.2f}"
         return None
+    @staticmethod
+    def remove_item(item_id):
+        query = "DELETE FROM menu_items WHERE item_id=%s"
+        Database.execute_query(query, (item_id,))
+
+    @staticmethod
+    def get_item_name(item_id):
+        query = "SELECT name FROM menu_items WHERE item_id = %s"
+        result = Database.fetch_query(query, (item_id,))
+        if result:
+            return result[0][0][1]
+        else:
+            return None

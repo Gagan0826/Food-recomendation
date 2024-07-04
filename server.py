@@ -174,6 +174,12 @@ def process_request(client_socket, request):
             all_items = employee.view_menu()
             response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in all_items])
             client_socket.send(response.encode('utf-8'))
+            
+        elif command == "DISCARD_ITEMS":
+            admin = Admin(user_id=params[0], name=params[1])
+            discarded_items = admin.discard_items_based_on_feedback()
+            response = f"Items removed from the menu: {discarded_items}"
+            client_socket.send(response.encode('utf-8'))
         else:
             client_socket.send("Unknown command".encode('utf-8'))
     except Exception as e:

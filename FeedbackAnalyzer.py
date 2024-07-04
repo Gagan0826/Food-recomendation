@@ -39,5 +39,20 @@ class FeedbackAnalyzer:
             query = "INSERT INTO generated_recommended_items (item_id, score) VALUES (%s, %s)"
             Database.execute_query(query, (item_id, score))
 
+    @staticmethod
+    def discard_items():
+        query = "SELECT item_id, AVG(rating) as avg_rating, GROUP_CONCAT(comment SEPARATOR ' ') as comments FROM feedback GROUP BY item_id"
+        items = Database.fetch_query(query)
+        
+        discard_list = []
+        for item_id, avg_rating, comments in items:
+            avg_rating = float(avg_rating)
+            sentiment_score = FeedbackAnalyzer.analyze_sentiment(comments)
+            
+            if avg_rating < 2 or sentiment_score < -2:
+                discard_list.append(item_id)
+
+        return discard_list
+
 if __name__ == "__main__":
     FeedbackAnalyzer.recommend_top_items()

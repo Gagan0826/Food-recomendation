@@ -58,7 +58,8 @@ class ConsoleApplication:
             print("2. Update Menu Item")
             print("3. Delete Menu Item")
             print("4. View Menu Item")
-            print("5. Logout")
+            print("5. Discard Menu Items Based on Feedback")
+            print("6. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -89,6 +90,11 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
+                command = f"DISCARD_ITEMS,{admin_id},{admin_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '6':
                 break
 
     @staticmethod
@@ -109,12 +115,18 @@ class ConsoleApplication:
             choice = input("Enter your choice: ")
 
             if choice == '1':
+                command = f"VIEW_ALL_MENU,{chef_id},{chef_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
                 item_id = input("Enter item id: ")
                 date = currentDate.today()
                 command = f"RECOMMEND_MENU,{chef_id},{chef_name},{item_id},{date}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '2':
+                command = f"VIEW_ALL_MENU,{chef_id},{chef_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
                 item_id = int(input("Enter item ID: "))
                 command = f"VIEW_FEEDBACK,{chef_id},{chef_name},{item_id}"
                 response = ConsoleApplication.send_request(command)
@@ -173,9 +185,10 @@ class ConsoleApplication:
             print("1. Choose Meal")
             print("2. Give Feedback")
             print("3. View available Menu")
-            print("4. Receive Notifications")
-            print("5. Vote for food")
-            print("6. Logout")
+            print("4. View All Menu Items")
+            print("5. Receive Notifications")
+            print("6. Vote for food")
+            print("7. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -199,11 +212,16 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '4':
-                command = f"RECEIVE_NOTIFICATION"
+                command = f"VIEW_ALL_MENU,{emp_id},{emp_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
             elif choice == '5':
+                command = f"RECEIVE_NOTIFICATION"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '6':
                 command = f"VIEW_AVAILABLE_MENU,{emp_id},{emp_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
@@ -213,7 +231,7 @@ class ConsoleApplication:
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
-            elif choice == '6':
+            elif choice == '7':
                 break
 
     @staticmethod

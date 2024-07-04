@@ -1,7 +1,7 @@
 from MenuItem import MenuItem
 from User import User
 from Database import Database
-
+from FeedbackAnalyzer import FeedbackAnalyzer
 
 class Admin(User):
     def __init__(self, user_id, name):
@@ -25,3 +25,13 @@ class Admin(User):
     def view_menu(self):
         query = "SELECT * FROM menu_items"
         return Database.fetch_query(query)
+    
+    def discard_items_based_on_feedback(self):
+        discard_items = FeedbackAnalyzer.discard_items()
+        discarded_item_names = []
+        for item_id in discard_items:
+            item_name = MenuItem.get_item_name(item_id)
+            if item_name:
+                MenuItem.remove_item(item_id)
+                discarded_item_names.append(item_name)
+        return discarded_item_names
