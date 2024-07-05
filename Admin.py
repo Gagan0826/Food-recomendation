@@ -26,12 +26,17 @@ class Admin(User):
         query = "SELECT * FROM menu_items"
         return Database.fetch_query(query)
     
-    def discard_items_based_on_feedback(self):
+    def get_low_rated_items(self):
         discard_items = FeedbackAnalyzer.discard_items()
         discarded_item_names = []
         for item_id in discard_items:
             item_name = MenuItem.get_item_name(item_id)
             if item_name:
-                MenuItem.remove_item(item_id)
                 discarded_item_names.append(item_name)
         return discarded_item_names
+
+    def confirm_discard_items(self, items_to_discard):
+        for item_name in items_to_discard:
+            item_id = MenuItem.get_item_id(item_name)
+            if item_id:
+                MenuItem.remove_item(item_id)

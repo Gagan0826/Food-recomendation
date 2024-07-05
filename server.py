@@ -177,9 +177,28 @@ def process_request(client_socket, request):
             
         elif command == "DISCARD_ITEMS":
             admin = Admin(user_id=params[0], name=params[1])
-            discarded_items = admin.discard_items_based_on_feedback()
-            response = f"Items removed from the menu: {discarded_items}"
+            low_rated_items = admin.get_low_rated_items()
+
+            if not low_rated_items:
+                response = "No items to remove from the menu."
+                client_socket.send(response.encode('utf-8'))
+            else:
+                confirmation_message = " Do you want to delete these items? (yes/no)"
+                response = f"Items identified for removal: {low_rated_items}. {confirmation_message}"
+                client_socket.send(response.encode('utf-8'))
+
+        elif command.startswith("CONFIRM_DISCARD"):
+            admin = Admin(user_id=params[0], name=params[1])
+            user_confirmation = params[2].strip().lower()
+            if user_confirmation == 'yes':
+                low_rated_items = admin.get_low_rated_items()  
+                admin.confirm_discard_items(low_rated_items)
+                response = f"Items removed from the menu: {low_rated_items}"
+            else:
+                response = "No items were removed from the menu."
+
             client_socket.send(response.encode('utf-8'))
+            
         else:
             client_socket.send("Unknown command".encode('utf-8'))
     except Exception as e:

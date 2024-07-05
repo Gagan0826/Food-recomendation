@@ -37,6 +37,15 @@ class MenuItem:
         query = "SELECT name FROM menu_items WHERE item_id = %s"
         result = Database.fetch_query(query, (item_id,))
         if result:
-            return result[0][0][1]
+            return result[0][0]
+        else:
+            return None
+
+    @staticmethod
+    def get_item_id(item_name):
+        query = "SELECT item_id FROM menu_items WHERE name = %s"
+        result = Database.fetch_query(query, (item_name,))
+        if result:
+            return result[0][0]
         else:
             return None

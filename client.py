@@ -94,6 +94,18 @@ class ConsoleApplication:
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
+                # Check if the response asks for confirmation
+                if "Do you want to delete these items? (yes/no)" in response:
+                    user_confirmation = input("Enter your choice (yes/no): ").strip().lower()
+
+                    # Send user confirmation to the server
+                    if user_confirmation in ['yes']:
+                        confirmation_command = f"CONFIRM_DISCARD,{admin_id},{admin_name},{user_confirmation}"
+                        final_response = ConsoleApplication.send_request(confirmation_command)
+                        print(final_response)
+                    else:
+                        print("No items were removed from the menu.")
+
             elif choice == '6':
                 break
 
@@ -186,7 +198,7 @@ class ConsoleApplication:
             print("2. Give Feedback")
             print("3. View available Menu")
             print("4. View All Menu Items")
-            print("5. Receive Notifications")
+            print("5. Show Notifications")
             print("6. Vote for food")
             print("7. Logout")
             choice = input("Enter your choice: ")
