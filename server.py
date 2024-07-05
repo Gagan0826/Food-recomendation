@@ -5,7 +5,7 @@ from Chef import Chef
 from Employee import Employee
 from Notification import Notification
 from FeedbackAnalyzer import FeedbackAnalyzer
-
+from DeletdMenuItem import DeletedMenuItem
 HOST = 'localhost'
 PORT = 8080
 NOTIFICATION_PORT = 5050
@@ -198,7 +198,38 @@ def process_request(client_socket, request):
                 response = "No items were removed from the menu."
 
             client_socket.send(response.encode('utf-8'))
+
+        elif command == "VIEW_DELETED_MENU":
+            deleted_items=DeletedMenuItem.view_deleted_menu()
+            response = "\n".join([f"ID: {item[0]}, Name: {item[1]}" for item in deleted_items])
+            client_socket.send(response.encode('utf-8'))
+
+        elif command.startswith("FEEDBACK_DELETED_ITEM"):
+            deleted_item_name = params[0]
+            reason = params[1]
+            improvement_required = params[2]
+            mothers_recipie = params[3]
             
+            deleted_item_id = DeletedMenuItem.get_deleted_item_id(deleted_item_name)
+
+            if deleted_item_id is not None:
+                DeletedMenuItem.save(deleted_item_id, deleted_item_name, reason, improvement_required, mothers_recipie)
+                response = f"Feedback received for the deleted item: {deleted_item_name}"
+            else:
+                response = f"Deleted item '{deleted_item_name}' not found."
+
+            client_socket.send(response.encode('utf-8'))
+
+        elif command == "VIEW_DELETED_ITEM_FEEDBACK":
+            feedback_items = Chef.view_deleted_items_feedback()
+            if feedback_items:
+                response = "\n".join([
+                    f"Feedback ID: {item[0]}, Deleted Item ID: {item[1]}, Name: {item[2]}, Reason: {item[3]}, Improvement Required: {item[4]}, Mother's Recipe: {item[5]}"
+                    for item in feedback_items
+                ])
+            else:
+                response = "No feedback available for deleted items."
+            client_socket.send(response.encode('utf-8'))
         else:
             client_socket.send("Unknown command".encode('utf-8'))
     except Exception as e:

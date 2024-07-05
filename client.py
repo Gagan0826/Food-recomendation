@@ -123,7 +123,8 @@ class ConsoleApplication:
             print("8. View Generated Recommended Items")
             print("9. View employee voted Items")
             print("10. Generate Report")
-            print("11. Logout")
+            print("11. View deleted item feedback")
+            print("12. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -188,6 +189,11 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '11':
+                command = f"VIEW_DELETED_ITEM_FEEDBACK,{chef_id},{chef_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '12':
                 break
 
     @staticmethod
@@ -200,7 +206,8 @@ class ConsoleApplication:
             print("4. View All Menu Items")
             print("5. Show Notifications")
             print("6. Vote for food")
-            print("7. Logout")
+            print("7. Provide Feedback on Deleted Item")
+            print("8. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -244,6 +251,24 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '7':
+                command = f"VIEW_DELETED_MENU,{emp_id},{emp_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+                deleted_item_name = input("Enter the name of the deleted item: ")
+                questions = [
+                    "What didn’t you like about the item?",
+                    "How would you like the item to taste?",
+                    "Share your mom’s recipe."
+                ]
+                feedback = []
+                for question in questions:
+                    answer = input(f"{question} ")
+                    feedback.append(answer)
+                command = f"FEEDBACK_DELETED_ITEM,{deleted_item_name},{feedback[0]},{feedback[1]},{feedback[2]}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+                
+            elif choice == '8':
                 break
 
     @staticmethod

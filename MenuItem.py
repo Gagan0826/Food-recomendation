@@ -1,5 +1,6 @@
 from Database import Database
 from FeedbackAnalyzer import FeedbackAnalyzer
+from Notification import Notification
 class MenuItem:
     def __init__(self, item_id, name, price, availability):
         self.item_id = item_id
@@ -30,6 +31,8 @@ class MenuItem:
     @staticmethod
     def remove_item(item_id):
         query = "DELETE FROM menu_items WHERE item_id=%s"
+        item_name=MenuItem.get_item_name(item_id)
+        Notification.send(f"{item_name} has been deleted, please provide feedback")
         Database.execute_query(query, (item_id,))
 
     @staticmethod

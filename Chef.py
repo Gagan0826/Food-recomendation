@@ -70,3 +70,10 @@ class Chef(User):
         WHERE item_id IN (SELECT item_id FROM user_preference_menu)
         """
         return Database.fetch_query(query)
+    @staticmethod
+    def view_deleted_items_feedback():
+        query =   """
+        SELECT *
+        FROM deleted_item_feedback
+        """
+        return Database.fetch_query(query)

@@ -2,6 +2,7 @@ from MenuItem import MenuItem
 from User import User
 from Database import Database
 from FeedbackAnalyzer import FeedbackAnalyzer
+from DeletdMenuItem import DeletedMenuItem
 
 class Admin(User):
     def __init__(self, user_id, name):
@@ -37,6 +38,7 @@ class Admin(User):
 
     def confirm_discard_items(self, items_to_discard):
         for item_name in items_to_discard:
+            DeletedMenuItem.add_item(item_name)
             item_id = MenuItem.get_item_id(item_name)
             if item_id:
                 MenuItem.remove_item(item_id)
