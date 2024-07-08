@@ -63,26 +63,41 @@ class ConsoleApplication:
             choice = input("Enter your choice: ")
 
             if choice == '1':
-                name = input("Enter item name: ")
-                price = float(input("Enter item price: "))
-                type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
-                availability = input("Enter item availability (1 for yes/ 0 for no): ")
-                command = f"ADD_MENU_ITEM,{admin_id},{admin_name},{name},{price},{type},{availability}"
-                ConsoleApplication.send_request(command)
+                try:
+                    name = input("Enter item name: ")
+                    price = float(input("Enter item price: "))
+                    type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
+                    availability = input("Enter item availability (1 for yes/ 0 for no): ")
+                    command = f"ADD_MENU_ITEM,{admin_id},{admin_name},{name},{price},{type},{availability}"
+                    ConsoleApplication.send_request(command)
+                except ValueError:
+                        print("Invalid input for price or availability. Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
 
             elif choice == '2':
-                item_id = int(input("Enter item ID: "))
-                new_price = float(input("Enter new price: "))
-                type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
-                new_availability = input("Enter new availability (yes/no): ")
-                command = f"UPDATE_MENU_ITEM,{admin_id},{admin_name},{item_id},{new_price},{type},{new_availability}"
-                ConsoleApplication.send_request(command)
+                try:
+                    item_id = int(input("Enter item ID: "))
+                    new_price = float(input("Enter new price: "))
+                    type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
+                    new_availability = input("Enter new availability (yes/no): ")
+                    command = f"UPDATE_MENU_ITEM,{admin_id},{admin_name},{item_id},{new_price},{type},{new_availability}"
+                    ConsoleApplication.send_request(command)
+                except ValueError:
+                        print("Invalid input for price or availability. Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
 
             elif choice == '3':
-                item_id = int(input("Enter item ID: "))
-                command = f"DELETE_MENU_ITEM,{admin_id},{admin_name},{item_id}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
+                try:
+                    item_id = int(input("Enter item ID: "))
+                    command = f"DELETE_MENU_ITEM,{admin_id},{admin_name},{item_id}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                except ValueError:
+                        print("Invalid input for item id Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
             
             elif choice == '4':
                 command = f"VIEW_ALL_MENU,{admin_id},{admin_name}"
@@ -137,13 +152,18 @@ class ConsoleApplication:
                 ConsoleApplication.send_request(command)
 
             elif choice == '2':
-                command = f"VIEW_ALL_MENU,{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
-                item_id = int(input("Enter item ID: "))
-                command = f"VIEW_FEEDBACK,{chef_id},{chef_name},{item_id}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
+                try:
+                    command = f"VIEW_ALL_MENU,{chef_id},{chef_name}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                    item_id = int(input("Enter item ID: "))
+                    command = f"VIEW_FEEDBACK,{chef_id},{chef_name},{item_id}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                except ValueError:
+                        print("Invalid input for item id Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
 
             elif choice == '3':
                 notification_message = input("Enter the notification message: ")
@@ -211,19 +231,29 @@ class ConsoleApplication:
             choice = input("Enter your choice: ")
 
             if choice == '1':
-                date = currentDate.today()
-                item_id = int(input("Enter item ID: "))
-                command = f"CHOOSE_MEAL,{emp_id},{emp_name},{date},{item_id}"
-                ConsoleApplication.send_request(command)
-                print("meal choosen")
+                try:
+                    date = currentDate.today()
+                    item_id = int(input("Enter item ID: "))
+                    command = f"CHOOSE_MEAL,{emp_id},{emp_name},{date},{item_id}"
+                    ConsoleApplication.send_request(command)
+                    print("meal choosen")
+                except ValueError:
+                        print("Invalid input for item id Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
 
             elif choice == '2':
-                item_id = int(input("Enter item ID: "))
-                comment = input("Enter your comment: ")
-                rating = int(input("Enter your rating: "))
-                date= currentDate.today()
-                command = f"GIVE_FEEDBACK,{emp_id},{emp_name},{item_id},{comment},{rating},{date}"
-                ConsoleApplication.send_request(command)
+                try:
+                    item_id = int(input("Enter item ID: "))
+                    comment = input("Enter your comment: ")
+                    rating = int(input("Enter your rating: "))
+                    date= currentDate.today()
+                    command = f"GIVE_FEEDBACK,{emp_id},{emp_name},{item_id},{comment},{rating},{date}"
+                    ConsoleApplication.send_request(command)
+                except ValueError:
+                        print("Invalid input for item id or rating Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
 
             elif choice == '3':
                 command = f"VIEW_AVAILABLE_MENU,{emp_id},{emp_name}"
@@ -241,14 +271,19 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '6':
-                command = f"VIEW_AVAILABLE_MENU,{emp_id},{emp_name}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
-                date = currentDate.today()
-                item_id = int(input("Enter food item ID: "))
-                command = f"VOTE_FOOD_ITEM,{emp_id},{emp_name},{date},{item_id}"
-                response = ConsoleApplication.send_request(command)
-                print(response)
+                try:    
+                    command = f"VIEW_AVAILABLE_MENU,{emp_id},{emp_name}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                    date = currentDate.today()
+                    item_id = int(input("Enter food item ID: "))
+                    command = f"VOTE_FOOD_ITEM,{emp_id},{emp_name},{date},{item_id}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                except ValueError:
+                        print("Invalid input for item id Please enter a number.")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
 
             elif choice == '7':
                 command = f"VIEW_DELETED_MENU,{emp_id},{emp_name}"
