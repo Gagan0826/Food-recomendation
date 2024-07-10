@@ -1,12 +1,17 @@
+
 import socket
 import threading
-from Admin import Admin
-from Chef import Chef
-from Employee import Employee
-from Notification import Notification
-from FeedbackAnalyzer import FeedbackAnalyzer
-from DeletdMenuItem import DeletedMenuItem
-from UserProfile import UserProfile
+import os
+import sys
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+sys.path.append(project_root)
+from src.business.Admin import Admin
+from src.business.Chef import Chef
+from src.business.Employee import Employee
+from src.utils.Notification import Notification
+from src.business.FeedbackAnalyzer import FeedbackAnalyzer
+from src.data.models.DeletdMenuItem import DeletedMenuItem
+from src.data.models.UserProfile import UserProfile
 HOST = 'localhost'
 PORT = 8080
 NOTIFICATION_PORT = 5050

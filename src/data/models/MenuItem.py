@@ -1,6 +1,6 @@
-from Database import Database
-from FeedbackAnalyzer import FeedbackAnalyzer
-from Notification import Notification
+from src.data.Database import Database
+from src.business.FeedbackAnalyzer import FeedbackAnalyzer
+from src.utils.Notification import Notification
 class MenuItem:
     def __init__(self, item_id, name, price, availability):
         self.item_id = item_id

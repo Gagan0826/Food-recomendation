@@ -1,5 +1,5 @@
-from sentiment_words import positive_words, negative_words
-from Database import Database
+from src.utils.sentiment_words import positive_words, negative_words
+from src.data.Database import Database
 
 class FeedbackAnalyzer:
 

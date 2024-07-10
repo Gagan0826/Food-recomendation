@@ -1,7 +1,7 @@
-from Feedback import Feedback
-from Notification import Notification
-from User import User
-from Database import Database
+from src.data.models.Feedback import Feedback
+from src.utils.Notification import Notification
+from src.data.models.User import User
+from src.data.Database import Database
 
 
 class Employee(User):

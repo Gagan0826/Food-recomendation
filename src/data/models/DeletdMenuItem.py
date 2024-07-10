@@ -1,4 +1,4 @@
-from Database import Database
+from src.data.Database import Database
 class DeletedMenuItem:
     def __init__(self, item_id, name):
         self.item_id = item_id

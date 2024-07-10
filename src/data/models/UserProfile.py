@@ -1,4 +1,4 @@
-from Database import Database
+from src.data.Database import Database
 
 class UserProfile:
     @staticmethod

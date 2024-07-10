@@ -1,8 +1,8 @@
-from MenuItem import MenuItem
-from User import User
-from Database import Database
-from FeedbackAnalyzer import FeedbackAnalyzer
-from DeletdMenuItem import DeletedMenuItem
+from src.data.models.MenuItem import MenuItem
+from src.data.models.User import User
+from src.data.Database import Database
+from src.business.FeedbackAnalyzer import FeedbackAnalyzer
+from src.data.models.DeletdMenuItem import DeletedMenuItem
 
 class Admin(User):
     def __init__(self, user_id, name):
