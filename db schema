@@ -62,5 +62,18 @@ CREATE TABLE user_preference_menu (
     FOREIGN KEY (employee_id) REFERENCES users(user_id)
 );
 
+create table deleted_items(
+	deleted_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name varchar(50) NOT NULL unique);
+    
+create table deleted_item_feedback(
+feedback_id	INT AUTO_INCREMENT PRIMARY KEY,
+deleted_item_id INT,
+item_name varchar(50) NOT NULL unique,
+reason text,
+improvement_required text,
+mothers_recipie text,
+FOREIGN KEY (deleted_item_id) REFERENCES deleted_items(deleted_item_id));
+
 drop table user_preference_menu;
 

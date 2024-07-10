@@ -6,6 +6,7 @@ from Employee import Employee
 from Notification import Notification
 from FeedbackAnalyzer import FeedbackAnalyzer
 from DeletdMenuItem import DeletedMenuItem
+from UserProfile import UserProfile
 HOST = 'localhost'
 PORT = 8080
 NOTIFICATION_PORT = 5050
@@ -218,7 +219,7 @@ def process_request(client_socket, request):
             else:
                 response = f"Deleted item '{deleted_item_name}' not found."
 
-            client_socket.send(response.encode('utf-8'))
+            client_socket.send(response.encode('utf-    8'))
 
         elif command == "VIEW_DELETED_ITEM_FEEDBACK":
             feedback_items = Chef.view_deleted_items_feedback()
@@ -230,6 +231,33 @@ def process_request(client_socket, request):
             else:
                 response = "No feedback available for deleted items."
             client_socket.send(response.encode('utf-8'))
+            
+        elif command.startswith("UPDATE_USER_PROFILE"):
+            user_id = params[0]
+            user_name = params[1]
+            diet_preference = params[2]
+            spice_level = params[3]
+            cuisine_preference = params[4]
+            sweet_tooth = params[5].lower() == 'true'
+            
+            UserProfile.update_profile(user_id, diet_preference, spice_level, cuisine_preference, sweet_tooth)
+            response = f"Profile updated for user: {user_name}"
+
+        elif command == "VIEW_PERSONALIZED_MENU":
+            user_id = params[0]
+            user_name = params[1]
+            
+            personalized_menu = UserProfile.get_personalized_menu(user_id)
+            
+            if personalized_menu:
+                response = "Personalized Menu:\n"
+                for item in personalized_menu:
+                    response += f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type: {item[3]}, Availability: {item[4]}\n"
+            else:
+                response = "No personalized menu items found based on your preferences."
+
+            client_socket.send(response.encode('utf-8'))
+            
         else:
             client_socket.send("Unknown command".encode('utf-8'))
     except Exception as e:
