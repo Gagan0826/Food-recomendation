@@ -38,15 +38,3 @@ class Employee(User):
     def view_menu(self):
         query = "SELECT * FROM menu_items"
         return Database.fetch_query(query)
-    
-    @staticmethod   
-    def update_user_profile(emp_id, emp_name):
-        print("\nUpdate User Profile")
-        diet_preference = input("Enter diet preference (Vegetarian/Non Vegetarian/Eggetarian): ")
-        spice_level = input("Enter spice level preference (High/Medium/Low): ")
-        cuisine_preference = input("Enter cuisine preference (North Indian/South Indian/Other): ")
-        sweet_tooth = input("Do you have a sweet tooth? (Yes/No): ").lower() == 'yes'
-
-        command = f"UPDATE_USER_PROFILE,{emp_id},{emp_name},{diet_preference},{spice_level},{cuisine_preference},{sweet_tooth}"
-        response = ConsoleApplication.send_request(command)
-        print(response)

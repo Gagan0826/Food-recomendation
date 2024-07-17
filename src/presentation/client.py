@@ -309,10 +309,18 @@ class ConsoleApplication:
                 print(response)
                 
             elif choice == '8':
-                ConsoleApplication.update_user_profile(emp_id, emp_name)
+                print("\nUpdate User Profile")
+                diet_preference = input("Enter diet preference (Vegetarian/Non Vegetarian/Eggetarian): ")
+                spice_level = input("Enter spice level preference (High/Medium/Low): ")
+                cuisine_preference = input("Enter cuisine preference (North Indian/South Indian/Other): ")
+                sweet_tooth = input("Do you have a sweet tooth? (Yes/No): ").lower() == 'yes'
+                command = f"UPDATE_USER_PROFILE,{emp_id},{emp_name},{diet_preference},{spice_level},{cuisine_preference},{sweet_tooth}"
+                response = ConsoleApplication.send_request(command)
 
             elif choice == '9':
-                ConsoleApplication.view_personalized_menu(emp_id, emp_name)
+                command = f"VIEW_PERSONALIZED_MENU,{emp_id},{emp_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
 
             elif choice == '10':
                 break
@@ -326,15 +334,7 @@ class ConsoleApplication:
         client_socket.send(command.encode('utf-8'))
         response = client_socket.recv(4096).decode('utf-8')
         client_socket.close()
-        return response
-    
-   
-
-    @staticmethod
-    def view_personalized_menu(emp_id, emp_name):
-        command = f"VIEW_PERSONALIZED_MENU,{emp_id},{emp_name}"
-        response = ConsoleApplication.send_request(command)
-        print(response)
+        return response   
 
 if __name__ == "__main__":
     ConsoleApplication.run()
