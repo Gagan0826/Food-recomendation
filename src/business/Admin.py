@@ -2,7 +2,7 @@ from src.data.models.MenuItem import MenuItem
 from src.data.models.User import User
 from src.data.Database import Database
 from src.business.FeedbackAnalyzer import FeedbackAnalyzer
-from src.data.models.DeletdMenuItem import DeletedMenuItem
+from src.data.models.DeletedMenuItem import DeletedMenuItem
 
 class Admin(User):
     def __init__(self, user_id, name):

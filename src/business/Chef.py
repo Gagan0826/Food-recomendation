@@ -24,7 +24,7 @@ class Chef(User):
     def send_notification(self, notification_message):
         Notification.send(notification_message)
 
-    def view_recomendation_menu(self):
+    def view_recommendation_menu(self):
         query =  """
         SELECT *
         FROM menu_items
