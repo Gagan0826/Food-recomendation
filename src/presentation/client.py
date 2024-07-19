@@ -60,7 +60,11 @@ class ConsoleApplication:
             print("3. Delete Menu Item")
             print("4. View Menu Item")
             print("5. Discard Menu Items Based on Feedback")
-            print("6. Logout")
+            print("6. Add User")
+            print("7. Delete User")
+            print("8. Update User")
+            print("9. View All Users")
+            print("10. Logout")
             choice = input("Enter your choice: ")
 
             if choice == '1':
@@ -123,6 +127,42 @@ class ConsoleApplication:
                         print("No items were removed from the menu.")
 
             elif choice == '6':
+                try:
+                    new_user_id = input("Enter new user ID: ")
+                    new_user_name = input("Enter new user name: ")
+                    new_user_role = input("Enter new user role (Admin/Chef/Employee): ")
+                    command = f"ADD_USER,{user_role},{admin_id},{admin_name},{new_user_id},{new_user_name},{new_user_role}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+
+            elif choice == '7':
+                try:
+                    user_id = input("Enter the user ID to delete: ")
+                    command = f"DELETE_USER,{user_role},{admin_id},{admin_name},{user_id}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+
+            elif choice == '8':
+                try:
+                    user_id = input("Enter the user ID to update: ")
+                    new_user_name = input("Enter new user name: ")
+                    new_user_role = input("Enter new user role (Admin/User): ")
+                    command = f"UPDATE_USER,{user_role},{admin_id},{admin_name},{user_id},{new_user_name},{new_user_role}"
+                    response = ConsoleApplication.send_request(command)
+                    print(response)
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+            
+            elif choice == '9':
+                command = f"VIEW_ALL_USERS,{user_role},{admin_id},{admin_name}"
+                response = ConsoleApplication.send_request(command)
+                print(response)
+
+            elif choice == '10':
                 break
 
     @staticmethod
@@ -314,11 +354,11 @@ class ConsoleApplication:
                 spice_level = input("Enter spice level preference (High/Medium/Low): ")
                 cuisine_preference = input("Enter cuisine preference (North Indian/South Indian/Other): ")
                 sweet_tooth = input("Do you have a sweet tooth? (Yes/No): ").lower() == 'yes'
-                command = f"UPDATE_USER_PROFILE,{emp_id},{emp_name},{diet_preference},{spice_level},{cuisine_preference},{sweet_tooth}"
+                command = f"UPDATE_USER_PROFILE,{user_role},{emp_id},{emp_name},{diet_preference},{spice_level},{cuisine_preference},{sweet_tooth}"
                 response = ConsoleApplication.send_request(command)
 
             elif choice == '9':
-                command = f"VIEW_PERSONALIZED_MENU,{emp_id},{emp_name}"
+                command = f"VIEW_PERSONALIZED_MENU,{user_role},{emp_id},{emp_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 

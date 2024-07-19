@@ -86,6 +86,26 @@ def handle_admin_requests(client_socket, command, params):
             all_items = admin.view_menu()
             response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in all_items])
             client_socket.send(response.encode('utf-8'))
+        elif command == "ADD_USER":
+            new_user_id = params[2]
+            new_user_name = params[3]
+            new_user_role = params[4]
+            admin.add_user(new_user_id, new_user_name, new_user_role)
+            client_socket.send("New user added successfully".encode('utf-8'))
+        elif command == "DELETE_USER":
+            user_id = params[2]
+            admin.delete_user(user_id)
+            client_socket.send("User deleted successfully".encode('utf-8'))
+        elif command == "UPDATE_USER":
+            user_id = params[2]
+            new_user_name = params[3]
+            new_user_role = params[4]
+            admin.update_user(user_id, new_user_name, new_user_role)
+            client_socket.send("User updated successfully".encode('utf-8'))
+        elif command == "VIEW_ALL_USERS":
+            all_users = admin.view_all_users()
+            response = "\n".join([f"ID: {user[0]}, Name: {user[1]}, Role: {user[2]}" for user in all_users])
+            client_socket.send(response.encode('utf-8'))
         else:
             client_socket.send("Unknown command for Admin".encode('utf-8'))
     except Exception as e:

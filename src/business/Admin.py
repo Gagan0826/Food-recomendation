@@ -42,3 +42,19 @@ class Admin(User):
             item_id = MenuItem.get_item_id(item_name)
             if item_id:
                 MenuItem.remove_item(item_id)
+
+    def add_user(self, user_id, name, role):
+        query = "INSERT INTO users (user_id, user_name, role) VALUES (%s, %s, %s)"
+        Database.execute_query(query, (user_id, name, role))
+
+    def delete_user(self, user_id):
+        query = "DELETE FROM users WHERE user_id=%s"
+        Database.execute_query(query, (user_id,))
+
+    def update_user(self, user_id, new_user_name, new_user_role):
+        query = "UPDATE users SET user_name=%s, role=%s WHERE user_id=%s"
+        Database.execute_query(query, (new_user_name, new_user_role, user_id))
+        
+    def view_all_users(self):
+        query = "SELECT * FROM users"
+        return Database.fetch_query(query)
