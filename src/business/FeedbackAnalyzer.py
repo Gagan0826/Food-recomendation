@@ -1,8 +1,8 @@
 from src.utils.sentiment_words import positive_words, negative_words
 from src.data.Database import Database
+from Values.Values import MIN_ACCEPTABLE_RATING,MIN_ACCEPTABLE_SENTIMENT
 
 class FeedbackAnalyzer:
-
     @staticmethod
     def analyze_sentiment(comment):
         words = comment.lower().split()
@@ -43,15 +43,12 @@ class FeedbackAnalyzer:
     def discard_items():
         query = "SELECT item_id, AVG(rating) as avg_rating, GROUP_CONCAT(comment SEPARATOR ' ') as comments FROM feedback GROUP BY item_id"
         items = Database.fetch_query(query)
-        
         discard_list = []
         for item_id, avg_rating, comments in items:
             avg_rating = float(avg_rating)
             sentiment_score = FeedbackAnalyzer.analyze_sentiment(comments)
-            
-            if avg_rating < 2 or sentiment_score < -2:
+            if avg_rating < MIN_ACCEPTABLE_RATING  or sentiment_score < MIN_ACCEPTABLE_SENTIMENT:
                 discard_list.append(item_id)
-
         return discard_list
 
 if __name__ == "__main__":

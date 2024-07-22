@@ -1,5 +1,5 @@
 from src.data.Database import Database
-
+from src.Values.Values import menu_tables,user_profile
 class UserProfile:
     @staticmethod
     def update_profile(user_id, diet_preference, spice_level, cuisine_preference, sweet_tooth):
@@ -47,22 +47,21 @@ class UserProfile:
     @staticmethod
     def calculate_item_score(item, user_profile):
         score = 0
-        
-        # Match diet preference
-        if item[5] == user_profile[2]: 
+        if item[menu_tables.get("diet_preference")] == user_profile[user_profile.get("diet_preference")]: 
             score += 3
-        elif (item[5] == 'Vegetarian' and user_profile[1] in ['Non Vegetarian', 'Eggetarian']) or \
-             (item[5] == 'Eggetarian' and user_profile[1] == 'Non Vegetarian'):
+
+        elif (item[menu_tables.get("diet_preference")] == 'Vegetarian' and user_profile[user_profile.get("diet_preference")] in ['Non Vegetarian', 'Eggetarian']) or \
+             (item[menu_tables.get("diet_preference")] == 'Eggetarian' and user_profile[user_profile.get("diet_preference")] == 'Non Vegetarian'):
             score += 1
 
-        # Match spice level
-        if item[6] == user_profile[3]: 
+        if item[menu_tables.get("spice_level")] == user_profile[3]: 
             score += 2
-        elif (item[6] == 'Medium' and user_profile[2] in ['Low', 'High']) or \
-             (user_profile[2] == 'Medium' and item[6] in ['Low', 'High']):
+
+        elif (item[menu_tables.get("spice_level")] == 'Medium' and user_profile[user_profile.get("spice_level")] in ['Low', 'High']) or \
+             (user_profile[user_profile.get("spice_level")] == 'Medium' and item[menu_tables.get("spice_level")] in ['Low', 'High']):
             score += 1
 
-        # Match cuisine preference
-        if item[7] == user_profile[4]:  
+        if item[menu_tables.get("cuisine_preference")] == user_profile[user_profile.get("cuisine_preference")]:  
             score += 2
+            
         return score
