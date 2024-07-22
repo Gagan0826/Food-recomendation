@@ -54,7 +54,7 @@ class UserProfile:
              (item[menu_tables.get("diet_preference")] == 'Eggetarian' and user_profile[user_profile.get("diet_preference")] == 'Non Vegetarian'):
             score += 1
 
-        if item[menu_tables.get("spice_level")] == user_profile[3]: 
+        if item[menu_tables.get("spice_level")] == user_profile[user_profile.get("spice_level")]: 
             score += 2
 
         elif (item[menu_tables.get("spice_level")] == 'Medium' and user_profile[user_profile.get("spice_level")] in ['Low', 'High']) or \
@@ -63,5 +63,5 @@ class UserProfile:
 
         if item[menu_tables.get("cuisine_preference")] == user_profile[user_profile.get("cuisine_preference")]:  
             score += 2
-            
+
         return score
