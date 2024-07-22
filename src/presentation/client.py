@@ -113,12 +113,8 @@ class ConsoleApplication:
                 command = f"DISCARD_ITEMS,{user_role},{admin_id},{admin_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
-
-                
                 if "Do you want to delete these items? (yes/no)" in response:
                     user_confirmation = input("Enter your choice (yes/no): ").strip().lower()
-
-                
                     if user_confirmation in ['yes']:
                         confirmation_command = f"CONFIRM_DISCARD,{user_role},{admin_id},{admin_name},{user_confirmation}"
                         final_response = ConsoleApplication.send_request(confirmation_command)
@@ -164,7 +160,6 @@ class ConsoleApplication:
 
             elif choice == '10':
                 break
-
     @staticmethod
     def chef_menu(chef_id, chef_name):
         user_role="Chef"
@@ -209,7 +204,7 @@ class ConsoleApplication:
 
             elif choice == '3':
                 notification_message = input("Enter the notification message: ")
-                command = f"SEND_NOTIFICATION,{user_role},{notification_message}"
+                command = f"SEND_NOTIFICATION,{user_role},{chef_id},{chef_name},{notification_message}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '4':
@@ -228,7 +223,7 @@ class ConsoleApplication:
                 print(response)
             
             elif choice == '7':
-                command = f"RECOMMEND_TOP_ITEMS",{user_role}
+                command = f"RECOMMEND_TOP_ITEMS,{user_role},{chef_id},{chef_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
@@ -311,7 +306,7 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
-                command = f"RECEIVE_NOTIFICATION,{user_role}"
+                command = f"RECEIVE_NOTIFICATION,{user_role},{emp_id},{emp_name}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 

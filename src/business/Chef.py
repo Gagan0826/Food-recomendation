@@ -30,7 +30,8 @@ class Chef(User):
         FROM menu_items
         WHERE item_id IN (SELECT item_id FROM chef_recommendation_menu)
         """
-        return Database.fetch_query(query)
+        result=Database.fetch_query(query)
+        return result
     
     def view_ordered_items(self):
         query =   """
@@ -38,7 +39,8 @@ class Chef(User):
         FROM menu_items
         WHERE item_id IN (SELECT item_id FROM Final_Order)
         """
-        return Database.fetch_query(query)
+        result = Database.fetch_query(query)
+        return result
     
     def view_generated_recommended_items(self):
         query = """
@@ -47,7 +49,8 @@ class Chef(User):
         JOIN menu_items ON generated_recommended_items.item_id = menu_items.item_id
         ORDER BY generated_recommended_items.score DESC
         """
-        return Database.fetch_query(query)
+        result=Database.fetch_query(query)
+        return result
     
     def generate_report(self, date_from, date_till):
             query = """
@@ -69,11 +72,13 @@ class Chef(User):
         FROM menu_items
         WHERE item_id IN (SELECT item_id FROM user_preference_menu)
         """
-        return Database.fetch_query(query)
+        result=Database.fetch_query(query)
+        return result
     @staticmethod
     def view_deleted_items_feedback():
         query =   """
         SELECT *
         FROM deleted_item_feedback
         """
-        return Database.fetch_query(query)
+        result=Database.fetch_query(query)
+        return result
