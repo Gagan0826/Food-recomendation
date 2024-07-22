@@ -6,15 +6,12 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.append(project_root)
 from src.business.Admin import Admin
 from src.business.Chef import Chef
-from src.business.Employee import Employee
-from src.utils.Notification import Notification
-from src.business.FeedbackAnalyzer import FeedbackAnalyzer
-from src.data.models.DeletedMenuItem import DeletedMenuItem
+from src.business.Employee import Employee  
 from src.data.models.UserProfile import UserProfile
-
+from NotificationServer import NotificationServer
+from src.utils.Notification import Notification
 HOST = 'localhost'
 PORT = 8080
-NOTIFICATION_PORT = 5050
 
 def handle_client(client_socket):
     while True:
@@ -32,7 +29,6 @@ def process_request(client_socket, request):
     try:
         command, *params = request.split(',')
         role = params[0]
-        
         if role == "Admin":
             handle_admin_requests(client_socket, command, params[1:])
         elif role == "Chef":
@@ -126,6 +122,11 @@ def handle_chef_requests(client_socket, command, params):
         elif command == "RECOMMEND_MENU":
             chef.recommend_menu(params[2], params[3])
             client_socket.send("Recommended successfully".encode('utf-8'))
+        elif command == "SEND_NOTIFICATION":
+            print("message sent",params[1])
+            notification_message = params[1]
+            Notification.send(notification_message)
+            client_socket.send("Notification sent successfully".encode('utf-8'))
         elif command == "VIEW_FEEDBACK":
             item_id = int(params[2])
             feedback = chef.view_feedback(item_id)
@@ -220,6 +221,9 @@ def handle_employee_requests(client_socket, command, params):
             user_id = params[0]
             employee.choose_meal(date, item_id, user_id)
             client_socket.send("Meal chosen successfully".encode('utf-8'))
+        elif command == "RECEIVE_NOTIFICATION":
+            notifications = Notification.receive()
+            client_socket.send("\n".join(notifications).encode('utf-8'))
         elif command == "VOTE_FOOD_ITEM":
             employee = Employee(user_id=params[0], name=params[1])
             date = params[2]
@@ -242,7 +246,8 @@ def handle_employee_requests(client_socket, command, params):
             else:
                 response = "No personalized menu items found based on your preferences."
             client_socket.send(response.encode('utf-8'))
-        elif command.startswith("UPDATE_USER_PROFILE"):
+        elif command == "UPDATE_USER_PROFILE":
+            print(f"Received params: {params}")  # Debug print
             user_id = params[0]
             user_name = params[1]
             diet_preference = params[2]
@@ -251,6 +256,7 @@ def handle_employee_requests(client_socket, command, params):
             sweet_tooth = params[5].lower() == 'true'
             UserProfile.update_profile(user_id, diet_preference, spice_level, cuisine_preference, sweet_tooth)
             response = f"Profile updated for user: {user_name}"
+            client_socket.send(response.encode('utf-8'))
         else:
             client_socket.send("Unknown command for Employee".encode('utf-8'))
     except Exception as e:
@@ -267,28 +273,6 @@ def start_server():
         print(f"Connection from {addr}")
         client_handler = threading.Thread(target=handle_client, args=(client_socket,))
         client_handler.start()
-
-class NotificationServer(threading.Thread):
-    def __init__(self, host='localhost', port=NOTIFICATION_PORT):
-        super().__init__()
-        self.host = host
-        self.port = port
-
-    def run(self):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-            server_socket.bind((self.host, self.port))
-            server_socket.listen()
-            print(f'Notification Server listening on {self.host}:{self.port}')
-            while True:
-                conn, addr = server_socket.accept()
-                with conn:
-                    print(f'Connected by {addr}')
-                    while True:
-                        data = conn.recv(1024)
-                        if not data:
-                            break
-                        Notification.send(data.decode())
-                        conn.sendall(b'Notification received')
 
 if __name__ == "__main__":
     main_server_thread = threading.Thread(target=start_server)

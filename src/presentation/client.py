@@ -209,7 +209,7 @@ class ConsoleApplication:
 
             elif choice == '3':
                 notification_message = input("Enter the notification message: ")
-                command = f"SEND_NOTIFICATION,{notification_message}"
+                command = f"SEND_NOTIFICATION,{user_role},{notification_message}"
                 ConsoleApplication.send_request(command)
 
             elif choice == '4':
@@ -311,7 +311,7 @@ class ConsoleApplication:
                 print(response)
 
             elif choice == '5':
-                command = f"RECEIVE_NOTIFICATION"
+                command = f"RECEIVE_NOTIFICATION,{user_role}"
                 response = ConsoleApplication.send_request(command)
                 print(response)
 
@@ -356,6 +356,7 @@ class ConsoleApplication:
                 sweet_tooth = input("Do you have a sweet tooth? (Yes/No): ").lower() == 'yes'
                 command = f"UPDATE_USER_PROFILE,{user_role},{emp_id},{emp_name},{diet_preference},{spice_level},{cuisine_preference},{sweet_tooth}"
                 response = ConsoleApplication.send_request(command)
+                print(response)
 
             elif choice == '9':
                 command = f"VIEW_PERSONALIZED_MENU,{user_role},{emp_id},{emp_name}"
