@@ -9,13 +9,15 @@ class Admin(User):
     def __init__(self, user_id, name):
         super().__init__(user_id, name)
 
-    def add_menu_item(self, name, price, type):
-        query = "INSERT INTO menu_items (name, price, food_type) VALUES (%s, %s, %s)"
-        Database.execute_query(query, (name, price, type))
+    def add_menu_item(self, name, price, food_type, diet_type, spice_level, cuisine_type):
+        query = "INSERT INTO menu_items (name, price, food_type, diet_type, spice_level, cuisine_type) VALUES (%s, %s, %s, %s, %s, %s)"
+        Database.execute_query(query, (name, price, food_type, diet_type, spice_level, cuisine_type))
 
-    def update_menu_item(self, item_id, new_price):
-        item = MenuItem(item_id, None, None, None)
-        item.set_price(new_price)
+    def update_menu_item(self, item_id, new_price, new_food_type, new_diet_type, new_spice_level, new_cuisine_type):
+        item = MenuItem(item_id, None, None)
+        item.update_details(new_price, new_food_type, new_diet_type, new_spice_level, new_cuisine_type)
+        return "Menu item updated successfully"
+
 
     def delete_menu_item(self, item_id):
         query = "DELETE FROM menu_items WHERE item_id=%s"

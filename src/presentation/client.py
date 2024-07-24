@@ -72,12 +72,14 @@ class ConsoleApplication:
                 try:
                     name = input("Enter item name: ")
                     price = float(input("Enter item price: "))
-                    type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
-                    #availability = input("Enter item availability yes/no: ").lower() == 'yes'
-                    command = f"ADD_MENU_ITEM,{user_role},{admin_id},{admin_name},{name},{price},{type}"
+                    food_type = input("Enter item type ('Breakfast', 'Lunch', 'Dinner'): ")
+                    diet_type = input("Enter diet type ('veg', 'non-veg', 'egg'): ")
+                    spice_level = input("Enter spice level ('High', 'Medium', 'Low'): ")
+                    cuisine_type = input("Enter cuisine type ('North Indian', 'South Indian', 'Other'): ")
+                    command = f"ADD_MENU_ITEM,{user_role},{admin_id},{admin_name},{name},{price},{food_type},{diet_type},{spice_level},{cuisine_type}"
                     ConsoleApplication.send_main_server_request(command)
                 except ValueError:
-                        print("Invalid input for price or availability. Please enter a number.")
+                    print("Invalid input for price. Please enter a valid number.")
                 except Exception as e:
                     print(f"An error occurred: {e}")
 
@@ -85,11 +87,14 @@ class ConsoleApplication:
                 try:
                     item_id = int(input("Enter item ID: "))
                     new_price = float(input("Enter new price: "))
-                    type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
-                    command = f"UPDATE_MENU_ITEM,{user_role},{admin_id},{admin_name},{item_id},{new_price},{type}"
+                    new_food_type = input("Enter new food type ('Breakfast', 'Lunch', 'Dinner'): ")
+                    new_diet_type = input("Enter new diet type ('veg', 'non-veg', 'egg'): ")
+                    new_spice_level = input("Enter new spice level ('High', 'Medium', 'Low'): ")
+                    new_cuisine_type = input("Enter new cuisine type ('North Indian', 'South Indian', 'Other'): ")
+                    command = f"UPDATE_MENU_ITEM,{user_role},{admin_id},{admin_name},{item_id},{new_price},{new_food_type},{new_diet_type},{new_spice_level},{new_cuisine_type}"
                     ConsoleApplication.send_main_server_request(command)
                 except ValueError:
-                        print("Invalid input for price or availability. Please enter a number.")
+                    print("Invalid input for price. Please enter a valid number.")
                 except Exception as e:
                     print(f"An error occurred: {e}")
 

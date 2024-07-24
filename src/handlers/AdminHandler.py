@@ -15,11 +15,27 @@ class AdminHandler:
                 else:
                     client_socket.send("Invalid credentials".encode('utf-8'))
             elif command == "ADD_MENU_ITEM":
-                admin.add_menu_item(params[2], float(params[3]), params[4])
+                item_name = params[2]
+                price = float(params[3])
+                food_type = params[4]
+                diet_type = params[5]
+                spice_level = params[6]
+                cuisine_type = params[7]
+                print(f"{item_name},{price},{food_type},{diet_type},{spice_level},{cuisine_type}")
+                
+                admin.add_menu_item(item_name, price, food_type, diet_type, spice_level, cuisine_type)
                 client_socket.send("Menu item added successfully".encode('utf-8'))
+
             elif command == "UPDATE_MENU_ITEM":
-                admin.update_menu_item(int(params[2]), float(params[3]))
-                client_socket.send("Menu item updated successfully".encode('utf-8'))
+                item_id = int(params[2])
+                new_price = float(params[3])
+                new_food_type = params[4]
+                new_diet_type = params[5]
+                new_spice_level = params[6]
+                new_cuisine_type = params[7]
+                response = admin.update_menu_item(item_id, new_price, new_food_type, new_diet_type, new_spice_level, new_cuisine_type)
+                client_socket.send(response.encode('utf-8'))
+
             elif command == "DELETE_MENU_ITEM":
                 response = admin.delete_menu_item(int(params[2]))
                 client_socket.send(response.encode('utf-8'))
