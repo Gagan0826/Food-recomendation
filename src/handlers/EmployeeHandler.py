@@ -77,7 +77,6 @@ class EmployeeHandler:
                     response = "No personalized menu items found based on your preferences."
                 client_socket.send(response.encode('utf-8'))
             elif command == "UPDATE_USER_PROFILE":
-                print(f"Received params: {params}")  # Debug print
                 user_id = params[0]
                 user_name = params[1]
                 diet_preference = params[2]
