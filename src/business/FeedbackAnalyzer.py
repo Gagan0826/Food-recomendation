@@ -1,6 +1,6 @@
 from src.utils.sentiment_words import positive_words, negative_words
 from src.data.Database import Database
-from Values.Values import MIN_ACCEPTABLE_RATING,MIN_ACCEPTABLE_SENTIMENT
+from src.Values.Values import MIN_ACCEPTABLE_RATING,MIN_ACCEPTABLE_SENTIMENT
 
 class FeedbackAnalyzer:
     @staticmethod

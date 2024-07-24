@@ -1,5 +1,5 @@
 from src.data.Database import Database
-from src.Values.Values import menu_tables,user_profile
+from src.Values.Values import menu_tables,user_profile_columns
 class UserProfile:
     @staticmethod
     def update_profile(user_id, diet_preference, spice_level, cuisine_preference, sweet_tooth):
@@ -47,21 +47,19 @@ class UserProfile:
     @staticmethod
     def calculate_item_score(item, user_profile):
         score = 0
-        if item[menu_tables.get("diet_preference")] == user_profile[user_profile.get("diet_preference")]: 
+        if item[menu_tables["diet_preference"]] == user_profile[user_profile_columns["diet_preference"]]: 
             score += 3
-
-        elif (item[menu_tables.get("diet_preference")] == 'Vegetarian' and user_profile[user_profile.get("diet_preference")] in ['Non Vegetarian', 'Eggetarian']) or \
-             (item[menu_tables.get("diet_preference")] == 'Eggetarian' and user_profile[user_profile.get("diet_preference")] == 'Non Vegetarian'):
+        elif (item[menu_tables["diet_preference"]] == 'Vegetarian' and user_profile[user_profile_columns["diet_preference"]] in ['Non Vegetarian', 'Eggetarian']) or \
+            (item[menu_tables["diet_preference"]] == 'Eggetarian' and user_profile[user_profile_columns["diet_preference"]] == 'Non Vegetarian'):
             score += 1
 
-        if item[menu_tables.get("spice_level")] == user_profile[user_profile.get("spice_level")]: 
+        if item[menu_tables["spice_level"]] == user_profile[user_profile_columns["spice_level"]]: 
             score += 2
-
-        elif (item[menu_tables.get("spice_level")] == 'Medium' and user_profile[user_profile.get("spice_level")] in ['Low', 'High']) or \
-             (user_profile[user_profile.get("spice_level")] == 'Medium' and item[menu_tables.get("spice_level")] in ['Low', 'High']):
+        elif (item[menu_tables["spice_level"]] == 'Medium' and user_profile[user_profile_columns["spice_level"]] in ['Low', 'High']) or \
+            (user_profile[user_profile_columns["spice_level"]] == 'Medium' and item[menu_tables["spice_level"]] in ['Low', 'High']):
             score += 1
 
-        if item[menu_tables.get("cuisine_preference")] == user_profile[user_profile.get("cuisine_preference")]:  
+        if item[menu_tables["cuisine_preference"]] == user_profile[user_profile_columns["cuisine_preference"]]:  
             score += 2
 
         return score

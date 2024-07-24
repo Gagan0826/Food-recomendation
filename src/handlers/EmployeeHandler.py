@@ -1,7 +1,7 @@
 from src.business.Employee import Employee
 from src.utils.Notification import Notification
 from src.data.models.UserProfile import UserProfile
-
+from src.data.models.DeletedMenuItem import DeletedMenuItem
 class EmployeeHandler:
     @staticmethod
     def handle_request(client_socket, command, params):
@@ -86,6 +86,24 @@ class EmployeeHandler:
                 sweet_tooth = params[5].lower() == 'true'
                 UserProfile.update_profile(user_id, diet_preference, spice_level, cuisine_preference, sweet_tooth)
                 response = f"Profile updated for user: {user_name}"
+                client_socket.send(response.encode('utf-8'))
+            elif command == "VIEW_DELETED_MENU":
+                deleted_items=DeletedMenuItem.view_deleted_menu()
+                response = "\n".join([f"ID: {item[0]}, Name: {item[1]}" for item in deleted_items])
+                client_socket.send(response.encode('utf-8'))
+            elif command.startswith("FEEDBACK_DELETED_ITEM"):
+                deleted_item_name = params[0]
+                reason = params[1]
+                improvement_required = params[2]
+                mothers_recipie = params[3]
+                
+                deleted_item_id = DeletedMenuItem.get_deleted_item_id(deleted_item_name)
+                if deleted_item_id is not None:
+                    DeletedMenuItem.save(deleted_item_id, deleted_item_name, reason, improvement_required, mothers_recipie)
+                    response = f"Feedback received for the deleted item: {deleted_item_name}"
+                else:
+                    response = f"Deleted item '{deleted_item_name}' not found."
+
                 client_socket.send(response.encode('utf-8'))
             else:
                 client_socket.send("Unknown command for Employee".encode('utf-8'))

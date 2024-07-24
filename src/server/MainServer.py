@@ -13,8 +13,8 @@ from src.utils.Notification import Notification
 from src.handlers.AdminHandler import AdminHandler
 from src.handlers.ChefHandler import ChefHandler
 from src.handlers.EmployeeHandler import EmployeeHandler
-HOST = 'localhost'
-PORT = 8080
+from src.Values.Values import *
+
 
 def handle_client(client_socket):
     while True:
@@ -45,9 +45,9 @@ def process_request(client_socket, request):
 
 def start_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((HOST, PORT))
+    server_socket.bind((HOST, MAIN_SERVER_PORT))
     server_socket.listen(5)
-    print(f"Server listening on {HOST}:{PORT}")
+    print(f"Server listening on {HOST}:{MAIN_SERVER_PORT}")
 
     while True:
         client_socket, addr = server_socket.accept()

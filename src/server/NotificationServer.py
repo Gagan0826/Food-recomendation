@@ -1,9 +1,9 @@
 import threading
 import socket
 from src.utils.Notification import Notification
+from src.Values.Values import *
 class NotificationServer(threading.Thread):
-    NOTIFICATION_PORT = 5050
-    def __init__(self, host='localhost', port=NOTIFICATION_PORT):
+    def __init__(self, host=HOST, port=NOTIFICATION_SERVER_PORT):
         super().__init__()
         self.host = host
         self.port = port
@@ -18,7 +18,7 @@ class NotificationServer(threading.Thread):
                 with conn:
                     print(f'Connected by {addr}')
                     while True:
-                        data = conn.recv(1024)
+                        data = conn.recv(4096)
                         if not data:
                             break
                         Notification.send(data.decode())

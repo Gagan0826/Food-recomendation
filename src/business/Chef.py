@@ -68,9 +68,11 @@ class Chef(User):
     
     def view_voted_items(self):
         query =   """
-        SELECT *
-        FROM menu_items
-        WHERE item_id IN (SELECT item_id FROM user_preference_menu)
+        SELECT mi.*
+        FROM menu_items mi
+        JOIN chef_recommendation_menu crm ON mi.item_id = crm.item_id
+        WHERE crm.rolled_out_date = CURDATE()
+        AND mi.item_id IN (SELECT item_id FROM user_preference_menu)
         """
         result=Database.fetch_query(query)
         return result

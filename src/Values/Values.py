@@ -7,8 +7,12 @@ menu_tables={
     "cuisine_preference":7
 }
 
-user_profile={
+user_profile_columns={
     "diet_preference":1,
     "spice_level":2,
     "cuisine_preference":4
 }
+
+HOST="192.168.5.23"
+MAIN_SERVER_PORT=8080
+NOTIFICATION_SERVER_PORT=5050

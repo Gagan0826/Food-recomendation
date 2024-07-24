@@ -2,6 +2,7 @@ import socket
 from datetime import date as currentDate
 
 class ConsoleApplication:
+    HOST = '192.168.5.23'
     @staticmethod
     def run():
         print("Welcome to the Cafeteria Recommendation Engine")
@@ -47,7 +48,7 @@ class ConsoleApplication:
     @staticmethod
     def login(user_type, user_id, name):
         command = f"LOGIN,{user_type},{user_id},{name}"
-        response = ConsoleApplication.send_request(command)
+        response = ConsoleApplication.send_main_server_request(command)
         return response == "Login successful"
 
     @staticmethod
@@ -74,7 +75,7 @@ class ConsoleApplication:
                     type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
                     availability = input("Enter item availability (1 for yes/ 0 for no): ")
                     command = f"ADD_MENU_ITEM,{user_role},{admin_id},{admin_name},{name},{price},{type},{availability}"
-                    ConsoleApplication.send_request(command)
+                    ConsoleApplication.send_main_server_request(command)
                 except ValueError:
                         print("Invalid input for price or availability. Please enter a number.")
                 except Exception as e:
@@ -87,7 +88,7 @@ class ConsoleApplication:
                     type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
                     new_availability = input("Enter new availability (yes/no): ")
                     command = f"UPDATE_MENU_ITEM,{user_role},{admin_id},{admin_name},{item_id},{new_price},{type},{new_availability}"
-                    ConsoleApplication.send_request(command)
+                    ConsoleApplication.send_main_server_request(command)
                 except ValueError:
                         print("Invalid input for price or availability. Please enter a number.")
                 except Exception as e:
@@ -97,7 +98,7 @@ class ConsoleApplication:
                 try:
                     item_id = int(input("Enter item ID: "))
                     command = f"DELETE_MENU_ITEM,{user_role},{admin_id},{admin_name},{item_id}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                 except ValueError:
                         print("Invalid input for item id Please enter a number.")
@@ -106,18 +107,18 @@ class ConsoleApplication:
             
             elif choice == '4':
                 command = f"VIEW_ALL_MENU,{user_role},{admin_id},{admin_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '5':
                 command = f"DISCARD_ITEMS,{user_role},{admin_id},{admin_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
                 if "Do you want to delete these items? (yes/no)" in response:
                     user_confirmation = input("Enter your choice (yes/no): ").strip().lower()
                     if user_confirmation in ['yes']:
                         confirmation_command = f"CONFIRM_DISCARD,{user_role},{admin_id},{admin_name},{user_confirmation}"
-                        final_response = ConsoleApplication.send_request(confirmation_command)
+                        final_response = ConsoleApplication.send_main_server_request(confirmation_command)
                         print(final_response)
                     else:
                         print("No items were removed from the menu.")
@@ -128,7 +129,7 @@ class ConsoleApplication:
                     new_user_name = input("Enter new user name: ")
                     new_user_role = input("Enter new user role (Admin/Chef/Employee): ")
                     command = f"ADD_USER,{user_role},{admin_id},{admin_name},{new_user_id},{new_user_name},{new_user_role}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                 except Exception as e:
                     print(f"An error occurred: {e}")
@@ -137,7 +138,7 @@ class ConsoleApplication:
                 try:
                     user_id = input("Enter the user ID to delete: ")
                     command = f"DELETE_USER,{user_role},{admin_id},{admin_name},{user_id}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                 except Exception as e:
                     print(f"An error occurred: {e}")
@@ -148,14 +149,14 @@ class ConsoleApplication:
                     new_user_name = input("Enter new user name: ")
                     new_user_role = input("Enter new user role (Admin/User): ")
                     command = f"UPDATE_USER,{user_role},{admin_id},{admin_name},{user_id},{new_user_name},{new_user_role}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                 except Exception as e:
                     print(f"An error occurred: {e}")
             
             elif choice == '9':
                 command = f"VIEW_ALL_USERS,{user_role},{admin_id},{admin_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '10':
@@ -181,21 +182,21 @@ class ConsoleApplication:
 
             if choice == '1':
                 command = f"VIEW_ALL_MENU,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
                 item_id = input("Enter item id: ")
                 date = currentDate.today()
                 command = f"RECOMMEND_MENU,{user_role},{chef_id},{chef_name},{item_id},{date}"
-                ConsoleApplication.send_request(command)
+                ConsoleApplication.send_main_server_request(command)
 
             elif choice == '2':
                 try:
                     command = f"VIEW_ALL_MENU,{user_role},{chef_id},{chef_name}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                     item_id = int(input("Enter item ID: "))
                     command = f"VIEW_FEEDBACK,{user_role},{chef_id},{chef_name},{item_id}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                 except ValueError:
                         print("Invalid input for item id Please enter a number.")
@@ -205,36 +206,36 @@ class ConsoleApplication:
             elif choice == '3':
                 notification_message = input("Enter the notification message: ")
                 command = f"SEND_NOTIFICATION,{user_role},{chef_id},{chef_name},{notification_message}"
-                ConsoleApplication.send_request(command)
+                ConsoleApplication.send_notification_server_request(notification_message)
 
             elif choice == '4':
                 command = f"VIEW_ALL_MENU,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '5':
                 command = f"VIEW_RECOMMENDATION_MENU,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '6':
                 command = f"VIEW_ORDERED_ITEMS,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
             
             elif choice == '7':
                 command = f"RECOMMEND_TOP_ITEMS,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '8':
                 command = f"VIEW_GENERATED_RECOMMENDED_ITEMS,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '9':
                 command = f"VIEW_VOTED_ITEMS,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '10':
@@ -242,12 +243,12 @@ class ConsoleApplication:
                 date_from = input("Enter starting date: ")
                 date_till = input("Enter ending date: ")
                 command = f"GENERATE_REPORT,{user_role},{chef_id},{chef_name},{date_from},{date_till}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '11':
                 command = f"VIEW_DELETED_ITEM_FEEDBACK,{user_role},{chef_id},{chef_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '12':
@@ -275,7 +276,7 @@ class ConsoleApplication:
                     date = currentDate.today()
                     item_id = int(input("Enter item ID: "))
                     command = f"CHOOSE_MEAL,{user_role},{emp_id},{emp_name},{date},{item_id}"
-                    ConsoleApplication.send_request(command)
+                    ConsoleApplication.send_main_server_request(command)
                     print("meal choosen")
                 except ValueError:
                         print("Invalid input for item id Please enter a number.")
@@ -289,7 +290,7 @@ class ConsoleApplication:
                     rating = int(input("Enter your rating: "))
                     date= currentDate.today()
                     command = f"GIVE_FEEDBACK,{user_role},{emp_id},{emp_name},{item_id},{comment},{rating},{date}"
-                    ConsoleApplication.send_request(command)
+                    ConsoleApplication.send_main_server_request(command)
                 except ValueError:
                         print("Invalid input for item id or rating Please enter a number.")
                 except Exception as e:
@@ -297,28 +298,28 @@ class ConsoleApplication:
 
             elif choice == '3':
                 command = f"VIEW_AVAILABLE_MENU,{user_role},{emp_id},{emp_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '4':
                 command = f"VIEW_ALL_MENU,{user_role},{emp_id},{emp_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '5':
                 command = f"RECEIVE_NOTIFICATION,{user_role},{emp_id},{emp_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '6':
                 try:    
                     command = f"VIEW_AVAILABLE_MENU,{user_role},{emp_id},{emp_name}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                     date = currentDate.today()
                     item_id = int(input("Enter food item ID: "))
                     command = f"VOTE_FOOD_ITEM,{user_role},{emp_id},{emp_name},{date},{item_id}"
-                    response = ConsoleApplication.send_request(command)
+                    response = ConsoleApplication.send_main_server_request(command)
                     print(response)
                 except ValueError:
                         print("Invalid input for item id Please enter a number.")
@@ -327,7 +328,7 @@ class ConsoleApplication:
 
             elif choice == '7':
                 command = f"VIEW_DELETED_MENU,{user_role},{emp_id},{emp_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
                 deleted_item_name = input("Enter the name of the deleted item: ")
                 questions = [
@@ -340,7 +341,7 @@ class ConsoleApplication:
                     answer = input(f"{question} ")
                     feedback.append(answer)
                 command = f"FEEDBACK_DELETED_ITEM,{user_role},{deleted_item_name},{feedback[0]},{feedback[1]},{feedback[2]}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
                 
             elif choice == '8':
@@ -350,27 +351,35 @@ class ConsoleApplication:
                 cuisine_preference = input("Enter cuisine preference (North Indian/South Indian/Other): ")
                 sweet_tooth = input("Do you have a sweet tooth? (Yes/No): ").lower() == 'yes'
                 command = f"UPDATE_USER_PROFILE,{user_role},{emp_id},{emp_name},{diet_preference},{spice_level},{cuisine_preference},{sweet_tooth}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '9':
                 command = f"VIEW_PERSONALIZED_MENU,{user_role},{emp_id},{emp_name}"
-                response = ConsoleApplication.send_request(command)
+                response = ConsoleApplication.send_main_server_request(command)
                 print(response)
 
             elif choice == '10':
                 break
 
     @staticmethod
-    def send_request(command):
-        HOST = 'localhost'
-        PORT = 8080
+    def send_main_server_request(command):
+        PORT = 8080 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect((HOST, PORT))
+        client_socket.connect((ConsoleApplication.HOST, PORT))
         client_socket.send(command.encode('utf-8'))
         response = client_socket.recv(4096).decode('utf-8')
         client_socket.close()
-        return response   
+        return response  
+
+    def send_notification_server_request(command):
+        PORT = 5050  
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect((ConsoleApplication.HOST, PORT))
+        client_socket.send(command.encode('utf-8'))
+        response = client_socket.recv(4096).decode('utf-8')
+        client_socket.close()
+        return response
 
 if __name__ == "__main__":
     ConsoleApplication.run()
