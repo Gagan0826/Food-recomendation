@@ -4,12 +4,7 @@ import os
 import sys
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.append(project_root)
-from src.business.Admin import Admin
-from src.business.Chef import Chef
-from src.business.Employee import Employee  
-from src.data.models.UserProfile import UserProfile
 from NotificationServer import NotificationServer
-from src.utils.Notification import Notification
 from src.handlers.AdminHandler import AdminHandler
 from src.handlers.ChefHandler import ChefHandler
 from src.handlers.EmployeeHandler import EmployeeHandler
