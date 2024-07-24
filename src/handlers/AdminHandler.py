@@ -15,10 +15,10 @@ class AdminHandler:
                 else:
                     client_socket.send("Invalid credentials".encode('utf-8'))
             elif command == "ADD_MENU_ITEM":
-                admin.add_menu_item(params[2], float(params[3]), params[4], params[5])
+                admin.add_menu_item(params[2], float(params[3]), params[4])
                 client_socket.send("Menu item added successfully".encode('utf-8'))
             elif command == "UPDATE_MENU_ITEM":
-                admin.update_menu_item(int(params[2]), float(params[3]), params[4])
+                admin.update_menu_item(int(params[2]), float(params[3]))
                 client_socket.send("Menu item updated successfully".encode('utf-8'))
             elif command == "DELETE_MENU_ITEM":
                 response = admin.delete_menu_item(int(params[2]))
@@ -42,8 +42,7 @@ class AdminHandler:
                 client_socket.send(response.encode('utf-8'))
             elif command == "VIEW_ALL_MENU":
                 all_items = admin.view_menu()
-                response = "\n".join([f"ID: {item[0]}, Name: {item[1]}, Price: {item[2]}, Type of meal: {item[3]}, Availability: {item[4]}" for item in all_items])
-                client_socket.send(response.encode('utf-8'))
+                client_socket.send(all_items.encode('utf-8'))
             elif command == "ADD_USER":
                 new_user_id = params[2]
                 new_user_name = params[3]
@@ -62,8 +61,7 @@ class AdminHandler:
                 client_socket.send("User updated successfully".encode('utf-8'))
             elif command == "VIEW_ALL_USERS":
                 all_users = admin.view_all_users()
-                response = "\n".join([f"ID: {user[0]}, Name: {user[1]}, Role: {user[2]}" for user in all_users])
-                client_socket.send(response.encode('utf-8'))
+                client_socket.send(all_users.encode('utf-8'))
             else:
                 client_socket.send("Unknown command for Admin".encode('utf-8'))
         except Exception as e:

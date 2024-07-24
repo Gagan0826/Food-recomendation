@@ -3,30 +3,31 @@ from src.data.models.User import User
 from src.data.Database import Database
 from src.business.FeedbackAnalyzer import FeedbackAnalyzer
 from src.data.models.DeletedMenuItem import DeletedMenuItem
+from tabulate import tabulate
 
 class Admin(User):
     def __init__(self, user_id, name):
         super().__init__(user_id, name)
 
-    def add_menu_item(self, name, price, type,availability):
-        query = "INSERT INTO menu_items (name, price, food_type, availability) VALUES (%s, %s, %s,%s)"
-        Database.execute_query(query, (name, price,type, availability))
+    def add_menu_item(self, name, price, type):
+        query = "INSERT INTO menu_items (name, price, food_type) VALUES (%s, %s, %s)"
+        Database.execute_query(query, (name, price, type))
 
-    def update_menu_item(self, item_id, new_price, new_availability):
+    def update_menu_item(self, item_id, new_price):
         item = MenuItem(item_id, None, None, None)
         item.set_price(new_price)
-        item.set_availability(new_availability)
 
     def delete_menu_item(self, item_id):
         query = "DELETE FROM menu_items WHERE item_id=%s"
         Database.execute_query(query, (item_id,))
-        response = "item deleted successfully"
-        return response
-    
+        return "Item deleted successfully"
+
     def view_menu(self):
-        query = "SELECT * FROM menu_items"
-        return Database.fetch_query(query)
-    
+        query = "SELECT item_id, name, price, food_type FROM menu_items"
+        result = Database.fetch_query(query)
+        headers = ["Item ID", "Name", "Price", "Type of Meal"]
+        return tabulate(result, headers, tablefmt="pretty") if result else "No menu items found."
+
     def get_low_rated_items(self):
         discard_items = FeedbackAnalyzer.discard_items()
         discarded_item_names = []
@@ -57,4 +58,6 @@ class Admin(User):
         
     def view_all_users(self):
         query = "SELECT * FROM users"
-        return Database.fetch_query(query)
+        result = Database.fetch_query(query)
+        headers = ["User ID", "Name", "Role"]
+        return tabulate(result, headers, tablefmt="pretty") if result else "No users found."

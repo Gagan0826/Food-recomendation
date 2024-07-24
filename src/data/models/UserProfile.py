@@ -1,5 +1,6 @@
 from src.data.Database import Database
 from src.Values.Values import menu_tables, user_profile_columns
+from tabulate import tabulate
 
 class UserProfile:
     @staticmethod
@@ -23,35 +24,38 @@ class UserProfile:
         return result[0] if result else None
 
     @staticmethod
-    def get_all_menu_items():
-        query = "SELECT * FROM menu_items"
+    def fetch_all_menu_items():
+        query = "SELECT item_id, name, price, food_type, diet_type, spice_level, cuisine_type FROM menu_items"
         return Database.fetch_query(query)
 
     @staticmethod
     def get_personalized_menu(user_id):
         user_profile = UserProfile.get_user_profile(user_id)
         if not user_profile:
-            return []
+            return "No user profile found."
+        all_menu_items = UserProfile.fetch_all_menu_items()
+        if not all_menu_items:
+            return "No menu items found."
 
-        all_menu_items = UserProfile.get_all_menu_items()
         personalized_menu = []
 
         for item in all_menu_items:
             score = UserProfile.calculate_item_score(item, user_profile)
             if score > 0:
-                personalized_menu.append((item, score))
+                personalized_menu.append((item[0], item[1], item[2], item[3], item[4], item[5], item[6], score))
 
-        personalized_menu.sort(key=lambda x: (-x[1], x[0][1]))
+        personalized_menu.sort(key=lambda x: -x[7])
 
-        return [item[0] for item in personalized_menu]
+        headers = ["Item ID", "Name", "Price", "Food Type", "Diet Type", "Spice Level", "Cuisine Type", "Score"]
+        return tabulate(personalized_menu, headers, tablefmt="pretty") if personalized_menu else "No personalized menu items found based on your preferences."
 
     @staticmethod
     def calculate_item_score(item, user_profile):
         score = 0
         if item[menu_tables["diet_preference"]] == user_profile[user_profile_columns["diet_preference"]]: 
             score += 3
-        elif (item[menu_tables["diet_preference"]] == 'Vegetarian' and user_profile[user_profile_columns["diet_preference"]] in ['Non Vegetarian', 'Eggetarian']) or \
-            (item[menu_tables["diet_preference"]] == 'Eggetarian' and user_profile[user_profile_columns["diet_preference"]] == 'Non Vegetarian'):
+        elif (item[menu_tables["diet_preference"]] == 'veg' and user_profile[user_profile_columns["diet_preference"]] in ['Non Veg', 'Egg']) or \
+            (item[menu_tables["diet_preference"]] == 'Egg' and user_profile[user_profile_columns["diet_preference"]] == 'Non Veg'):
             score += 1
 
         if item[menu_tables["spice_level"]] == user_profile[user_profile_columns["spice_level"]]: 

@@ -73,8 +73,8 @@ class ConsoleApplication:
                     name = input("Enter item name: ")
                     price = float(input("Enter item price: "))
                     type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
-                    availability = input("Enter item availability (1 for yes/ 0 for no): ")
-                    command = f"ADD_MENU_ITEM,{user_role},{admin_id},{admin_name},{name},{price},{type},{availability}"
+                    #availability = input("Enter item availability yes/no: ").lower() == 'yes'
+                    command = f"ADD_MENU_ITEM,{user_role},{admin_id},{admin_name},{name},{price},{type}"
                     ConsoleApplication.send_main_server_request(command)
                 except ValueError:
                         print("Invalid input for price or availability. Please enter a number.")
@@ -86,8 +86,7 @@ class ConsoleApplication:
                     item_id = int(input("Enter item ID: "))
                     new_price = float(input("Enter new price: "))
                     type = input("Enter item type('Breakfast', 'Lunch', 'Dinner'): ")
-                    new_availability = input("Enter new availability (yes/no): ")
-                    command = f"UPDATE_MENU_ITEM,{user_role},{admin_id},{admin_name},{item_id},{new_price},{type},{new_availability}"
+                    command = f"UPDATE_MENU_ITEM,{user_role},{admin_id},{admin_name},{item_id},{new_price},{type}"
                     ConsoleApplication.send_main_server_request(command)
                 except ValueError:
                         print("Invalid input for price or availability. Please enter a number.")
@@ -147,7 +146,7 @@ class ConsoleApplication:
                 try:
                     user_id = input("Enter the user ID to update: ")
                     new_user_name = input("Enter new user name: ")
-                    new_user_role = input("Enter new user role (Admin/User): ")
+                    new_user_role = input("Enter new user role (Admin/Chef/Employee): ")
                     command = f"UPDATE_USER,{user_role},{admin_id},{admin_name},{user_id},{new_user_name},{new_user_role}"
                     response = ConsoleApplication.send_main_server_request(command)
                     print(response)
@@ -346,7 +345,7 @@ class ConsoleApplication:
                 
             elif choice == '8':
                 print("\nUpdate User Profile")
-                diet_preference = input("Enter diet preference (Vegetarian/Non Vegetarian/Eggetarian): ")
+                diet_preference = input("Enter diet preference (Veg / Non Veg / Egg): ")
                 spice_level = input("Enter spice level preference (High/Medium/Low): ")
                 cuisine_preference = input("Enter cuisine preference (North Indian/South Indian/Other): ")
                 sweet_tooth = input("Do you have a sweet tooth? (Yes/No): ").lower() == 'yes'

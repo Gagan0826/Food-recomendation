@@ -2,9 +2,9 @@ MIN_ACCEPTABLE_RATING = 2.0
 MIN_ACCEPTABLE_SENTIMENT = -2.0
 
 menu_tables = {
-    "diet_preference": 5,      
-    "spice_level": 6,          
-    "cuisine_preference": 7    
+    'diet_preference': 4,  
+    'spice_level': 5,      
+    'cuisine_preference': 6 
 }
 
 user_profile_columns = {
