@@ -1,5 +1,6 @@
 from src.data.Database import Database
-from src.Values.Values import menu_tables,user_profile_columns
+from src.Values.Values import menu_tables, user_profile_columns
+
 class UserProfile:
     @staticmethod
     def update_profile(user_id, diet_preference, spice_level, cuisine_preference, sweet_tooth):
@@ -58,7 +59,6 @@ class UserProfile:
         elif (item[menu_tables["spice_level"]] == 'Medium' and user_profile[user_profile_columns["spice_level"]] in ['Low', 'High']) or \
             (user_profile[user_profile_columns["spice_level"]] == 'Medium' and item[menu_tables["spice_level"]] in ['Low', 'High']):
             score += 1
-
         if item[menu_tables["cuisine_preference"]] == user_profile[user_profile_columns["cuisine_preference"]]:  
             score += 2
 
